@@ -1,0 +1,15 @@
+[package]
+name = "docsearch"
+version = "0.1.0"
+authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
+edition = "2018"
+resolver = "2"
+
+[dependencies]
+anyhow = "1.0.40"
+reqwest = { version = "0.11.3", default-features = false, features = ["gzip", "rustls-tls"] }
+serde = { version = "1.0.125", features = ["derive"] }
+serde_json = "1.0.64"
+serde_repr = "0.1.6"
+tokio = { version = "1.5.0", features = ["macros", "rt"] }
+url = "2.2.1"
