@@ -13,7 +13,14 @@ pub struct CrateIndex {
 }
 
 pub async fn search(name: &str, version: Option<&str>) -> Result<Vec<CrateIndex>> {
-    let (version, index) = crates::search(name, version).await?;
+    Ok(transform(crates::search(name, version).await?)?)
+}
+
+pub async fn get_std() -> Result<Vec<CrateIndex>> {
+    Ok(transform(crates::get_std().await?)?)
+}
+
+fn transform((version, index): (String, String)) -> Result<Vec<CrateIndex>> {
     let mappings = index::load(&index)?;
 
     Ok(mappings
