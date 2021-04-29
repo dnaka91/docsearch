@@ -1,8 +1,9 @@
 use std::collections::HashMap;
 
-use anyhow::Result;
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;
+
+use crate::Result;
 
 #[derive(Debug)]
 struct IndexData {

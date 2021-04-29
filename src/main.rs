@@ -1,4 +1,4 @@
-use anyhow::Result;
+use docsearch::Result;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<()> {

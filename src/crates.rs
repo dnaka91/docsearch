@@ -1,5 +1,6 @@
-use anyhow::Result;
 use reqwest::redirect::Policy;
+
+use crate::{Error, Result};
 
 const DOCSRS_URL: &str = "https://docs.rs";
 
@@ -20,13 +21,13 @@ pub async fn search(name: &str, version: Option<&str>) -> Result<(String, String
     let version = resp
         .url()
         .path_segments()
-        .unwrap()
+        .unwrap() // safe as we always have a proper https://... URL
         .nth(1)
-        .unwrap()
+        .ok_or(Error::MissingVersion)?
         .to_owned();
     let body = resp.text().await?;
 
-    let index_path = find_url(&body).unwrap();
+    let index_path = find_url(&body).ok_or(Error::IndexNotFound)?;
     println!("path: {}", index_path);
     let index_url = format!("{}/{}/{}/{}", DOCSRS_URL, name, version, index_path);
     println!("url:  {}", index_url);
@@ -47,7 +48,7 @@ pub async fn get_std() -> Result<(String, String)> {
         .text()
         .await?;
 
-    let index_path = find_url(&body).unwrap();
+    let index_path = find_url(&body).ok_or(Error::IndexNotFound)?;
     println!("path: {}", index_path);
     let index_url = format!("https://doc.rust-lang.org/nightly/{}", index_path);
     println!("url:  {}", index_url);
@@ -55,7 +56,7 @@ pub async fn get_std() -> Result<(String, String)> {
     let version = index_path
         .strip_prefix("search-index")
         .and_then(|url| url.strip_suffix(".js"))
-        .unwrap()
+        .ok_or_else(|| Error::InvalidVersionFormat(index_path.to_owned()))?
         .to_owned();
 
     let index = reqwest::get(index_url)

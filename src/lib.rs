@@ -5,10 +5,24 @@
 
 use std::collections::HashMap;
 
-use anyhow::Result;
-
 mod crates;
 mod index;
+
+pub type Result<T, E = Error> = std::result::Result<T, E>;
+
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error("failed deserializing JSON")]
+    Json(#[from] serde_json::Error),
+    #[error("a HTTP request failed")]
+    Http(#[from] reqwest::Error),
+    #[error("the version part was missing in a URL")]
+    MissingVersion,
+    #[error("couldn't find the index path in a response body")]
+    IndexNotFound,
+    #[error("version was not in the expected `search-index<X.X.X>.js` format but `{0}`")]
+    InvalidVersionFormat(String),
+}
 
 #[derive(Debug)]
 pub struct CrateIndex {
