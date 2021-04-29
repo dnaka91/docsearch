@@ -4,9 +4,10 @@ use reqwest::redirect::Policy;
 const DOCSRS_URL: &str = "https://docs.rs";
 
 pub async fn search(name: &str, version: Option<&str>) -> Result<(String, String)> {
-    let page_url = version
-        .map(|v| format!("{}/{}/{}", DOCSRS_URL, name, v))
-        .unwrap_or_else(|| format!("{}/{}", DOCSRS_URL, name));
+    let page_url = version.map_or_else(
+        || format!("{}/{}", DOCSRS_URL, name),
+        |v| format!("{}/{}/{}", DOCSRS_URL, name, v),
+    );
 
     let resp = reqwest::Client::builder()
         .redirect(Policy::limited(10))
