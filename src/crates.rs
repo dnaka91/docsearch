@@ -1,11 +1,17 @@
 use anyhow::Result;
 use reqwest::redirect::Policy;
 
-pub async fn search(name: &str) -> Result<(String, String)> {
+const DOCSRS_URL: &str = "https://docs.rs";
+
+pub async fn search(name: &str, version: Option<&str>) -> Result<(String, String)> {
+    let page_url = version
+        .map(|v| format!("{}/{}/{}", DOCSRS_URL, name, v))
+        .unwrap_or_else(|| format!("{}/{}", DOCSRS_URL, name));
+
     let resp = reqwest::Client::builder()
         .redirect(Policy::limited(10))
         .build()?
-        .get(format!("https://docs.rs/{}", name))
+        .get(page_url)
         .send()
         .await?
         .error_for_status()?;
@@ -21,7 +27,7 @@ pub async fn search(name: &str) -> Result<(String, String)> {
 
     let index_url = find_url(&body).unwrap();
     println!("url: {}", index_url);
-    let index_url = format!("https://docs.rs/{}/{}/{}", name, version, index_url);
+    let index_url = format!("{}/{}/{}/{}", DOCSRS_URL, name, version, index_url);
     println!("url: {}", index_url);
 
     let index = reqwest::get(index_url)

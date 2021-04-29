@@ -12,8 +12,8 @@ pub struct CrateIndex {
     pub mapping: HashMap<String, String>,
 }
 
-pub async fn search(name: &str) -> Result<Vec<CrateIndex>> {
-    let (version, index) = crates::search(name).await?;
+pub async fn search(name: &str, version: Option<&str>) -> Result<Vec<CrateIndex>> {
+    let (version, index) = crates::search(name, version).await?;
     let mappings = index::load(&index)?;
 
     Ok(mappings
