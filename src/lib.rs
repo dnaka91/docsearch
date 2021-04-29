@@ -1,5 +1,11 @@
 #![forbid(unsafe_code)]
-#![deny(rust_2018_idioms, clippy::all, clippy::pedantic)]
+#![deny(
+    rust_2018_idioms,
+    clippy::all,
+    clippy::pedantic,
+    clippy::print_stderr,
+    clippy::print_stdout
+)]
 #![warn(clippy::nursery)]
 #![allow(clippy::missing_errors_doc)]
 
@@ -16,8 +22,8 @@ pub enum Error {
     Json(#[from] serde_json::Error),
     #[error("a HTTP request failed")]
     Http(#[from] reqwest::Error),
-    #[error("the version part was missing in a URL")]
-    MissingVersion,
+    #[error("the version part was missing in `{0}`")]
+    MissingVersion(String),
     #[error("couldn't find the index path in a response body")]
     IndexNotFound,
     #[error("version was not in the expected `search-index<X.X.X>.js` format but `{0}`")]

@@ -1,3 +1,4 @@
+use log::debug;
 use reqwest::redirect::Policy;
 
 use crate::{Error, Result};
@@ -10,6 +11,7 @@ pub async fn search(name: &str, version: Option<&str>) -> Result<(String, String
         |v| format!("{}/{}/{}", DOCSRS_URL, name, v),
     );
 
+    debug!("getting content at {}", page_url);
     let resp = reqwest::Client::builder()
         .redirect(Policy::limited(10))
         .build()?
@@ -23,15 +25,15 @@ pub async fn search(name: &str, version: Option<&str>) -> Result<(String, String
         .path_segments()
         .unwrap() // safe as we always have a proper https://... URL
         .nth(1)
-        .ok_or(Error::MissingVersion)?
+        .ok_or_else(|| Error::MissingVersion(resp.url().to_string()))?
         .to_owned();
     let body = resp.text().await?;
 
     let index_path = find_url(&body).ok_or(Error::IndexNotFound)?;
-    println!("path: {}", index_path);
+    debug!("found index path: {}", index_path);
     let index_url = format!("{}/{}/{}/{}", DOCSRS_URL, name, version, index_path);
-    println!("url:  {}", index_url);
 
+    debug!("getting index at {}", index_url);
     let index = reqwest::get(index_url)
         .await?
         .error_for_status()?
@@ -49,10 +51,10 @@ pub async fn get_std() -> Result<(String, String)> {
         .await?;
 
     let index_path = find_url(&body).ok_or(Error::IndexNotFound)?;
-    println!("path: {}", index_path);
+    debug!("found index path: {}", index_path);
     let index_url = format!("https://doc.rust-lang.org/nightly/{}", index_path);
-    println!("url:  {}", index_url);
 
+    debug!("getting index at {}", index_url);
     let version = index_path
         .strip_prefix("search-index")
         .and_then(|url| url.strip_suffix(".js"))
