@@ -346,8 +346,9 @@ fn generate_crate_mapping(data: CrateData) -> BTreeMap<String, String> {
 
 #[cfg(test)]
 mod tests {
-    use insta::glob;
     use std::fs;
+
+    use insta::glob;
 
     use super::*;
 
