@@ -1,0 +1,20 @@
+---
+source: src/index.rs
+expression: data
+input_file: src/fixtures/thiserror-1.0.26.js
+
+---
+thiserror:
+  doc: github crates-io docs-rs
+  t:
+    - ProcDerive
+  n:
+    - Error
+  q:
+    - thiserror
+  d:
+    - ""
+  i:
+    - 0
+  p: []
+

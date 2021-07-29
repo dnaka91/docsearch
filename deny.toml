@@ -1,0 +1,14 @@
+[licenses]
+allow-osi-fsf-free = "both"
+exceptions = [
+    { allow = ["MIT", "ISC", "OpenSSL"], name = "ring", version = "*" },
+    { allow = ["MPL-2.0"], name = "webpki-roots", version = "*" },
+]
+
+[[licenses.clarify]]
+name = "ring"
+version = "*"
+expression = "MIT AND ISC AND OpenSSL"
+license-files = [
+    { path = "LICENSE", hash = 0xbd0eed23 },
+]

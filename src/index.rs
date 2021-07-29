@@ -1,33 +1,58 @@
-use std::collections::HashMap;
+//! Handling of the index data and its transformation in a more usable format as well as a mapping
+//! of FQN to rustdoc URL.
+
+use std::collections::{BTreeMap, HashMap};
 
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;
 
 use crate::Result;
 
-#[derive(Debug)]
+/// Whole index data after transformation.
+#[cfg_attr(test, derive(PartialEq, Eq, serde::Serialize))]
 struct IndexData {
+    /// Mapping from crate name to data.
     crates: HashMap<String, CrateData>,
 }
 
-#[derive(Debug)]
+/// Crate data after transformation.
+#[cfg_attr(test, derive(PartialEq, Eq, serde::Serialize))]
 struct CrateData {
+    /// Doc string of the crate.
+    #[allow(dead_code)]
     doc: String,
+    /// Data for each individual item of the crate.
     items: Vec<IndexItem>,
-    paths: Vec<(ItemType, String)>, // aliases
+    /// Parent paths that help to construct FQNs and URLs from item information.
+    paths: Vec<(ItemType, String)>,
+    // aliases
 }
 
-#[derive(Debug)]
+/// Index data for a single item after transformation.
+///
+/// Taken from: <https://github.com/rust-lang/rust/blob/eba3228b2a9875d268ff3990903d04e19f6cdb0c/src/librustdoc/html/render/mod.rs#L84>.
+#[cfg_attr(test, derive(PartialEq, Eq, serde::Serialize))]
 struct IndexItem {
+    /// The type of item.
     ty: ItemType,
+    /// Simple name without path.
     name: String,
+    /// Resolved, full path.
     path: String,
+    /// Short, one line description. Can contain HTML tags and is likely truncated with the `…`
+    /// character.
+    #[allow(dead_code)]
     desc: String,
+    /// Index to the parent item, if it belongs to another item.
     parent_idx: Option<usize>,
     // search_type
 }
 
+/// Different item types that can appear in the rust docs to identify the kind of item.
+///
+/// Taken from: <https://github.com/rust-lang/rust/blob/eba3228b2a9875d268ff3990903d04e19f6cdb0c/src/librustdoc/formats/item_type.rs>.
 #[derive(Clone, Copy, Debug, Deserialize_repr)]
+#[cfg_attr(test, derive(PartialEq, Eq, serde::Serialize))]
 #[repr(u8)]
 enum ItemType {
     Module = 0,
@@ -91,29 +116,80 @@ impl ItemType {
     }
 }
 
+/// The whole index data for a crate. It usually contains only one entry for the crate it was
+/// generated for. The stdlib index is a special case where multiple crates like `std` and `alloc`
+/// are included.
 #[derive(Debug, Deserialize)]
+#[cfg_attr(test, derive(PartialEq, Eq, serde::Serialize))]
 struct RawIndexData {
+    /// Mapping from crate name to raw index data.
     #[serde(flatten)]
     crates: HashMap<String, RawCrateData>,
 }
 
+/// Crate index data in its raw form. All elements are vectors and the same index over all of them
+/// contain the information for a single item.
+///
+/// Taken from: <https://github.com/rust-lang/rust/blob/eba3228b2a9875d268ff3990903d04e19f6cdb0c/src/librustdoc/html/render/cache.rs#L121>.
 #[derive(Debug, Deserialize)]
+#[cfg_attr(test, derive(PartialEq, Eq, serde::Serialize))]
 struct RawCrateData {
+    /// Doc string for the crate. Seems to always be `github\u{2002}crates-io\u{2002}docs-rs`.
     doc: String,
+    /// Type of item.
     t: Vec<ItemType>,
+    /// Simple name without the path.
     n: Vec<String>,
+    /// Module path of the item. This uses previous items as reference and an empty value means to
+    /// use the value of the previous item. Similar to being still in the same _directory_.
     q: Vec<String>,
+    /// Short, one line description of the item. Maybe contain HTML tags and is likely truncated.
     d: Vec<String>,
+    /// Index of the parent item. For example if the item is a method, it references the index of
+    /// the struct/enum/... it belongs to.
+    ///
+    /// A value of `0` means that no parent exists. Therefore, indexes start at `1` and need to be
+    /// adjusted to access the right item in the other vectors.
     i: Vec<usize>,
-    // f
+    // f: search type
+    /// Further information about the parent item that helps in constructing the full path of an
+    /// item with parent.
+    ///
+    /// For example a method `baz` as part of the struct `Bar` in the module `foo` will only have
+    /// the basic path `foo` as the [`Self::q`] value only describes module paths. This field
+    /// contains the parent name `Bar` (and its item type) so that the full path `foo::Bar::baz` can
+    /// be constructed.
     p: Vec<(ItemType, String)>,
-    // a
+    // a: aliases
 }
 
-pub fn load(index: &str) -> Result<HashMap<String, HashMap<String, String>>> {
+/// Parse and transform a raw index file and convert it into mappings from FQNs to URLs that can be
+/// used to generate permalinks to the items' docs page.
+///
+/// This is the combination of the internal functions [`load_raw`], [`transform`] and
+/// [`generate_mapping`].
+pub fn load(index: &str) -> Result<HashMap<String, BTreeMap<String, String>>> {
     Ok(generate_mapping(transform(load_raw(index)?)))
 }
 
+/// Extract the JSON content from the index data and run it through [`serde`] to transform it into
+/// usable data structures.
+///
+/// The index data looks basically as follows:
+///
+/// ```js
+/// var searchIndex = JSON.parse('{\
+/// "cratename":{"doc":"...","t":[1],"n":["Name"],"q":["path"],"d":[""],"i":[0],"f":[null],"p":[]}\
+/// }');
+/// if (window.initSearch) {window.initSearch(searchIndex)};
+/// ```
+///
+/// After the initial JavaScript line, the file contains one line of JSON data for each crate
+/// contained in the index. These are extracted and the surrounding `{` and `}` delimiters added
+/// again to create a valid JSON object.
+///
+/// For further explanation of the individual fields of a single crate entry, looks at the docs of
+/// [`RawIndexData`] and [`RawCrateData`].
 fn load_raw(index: &str) -> Result<RawIndexData> {
     let json = {
         let mut json = index
@@ -130,6 +206,9 @@ fn load_raw(index: &str) -> Result<RawIndexData> {
                 json
             });
         json.push('}');
+
+        // Inverse operation of:
+        // <https://github.com/rust-lang/rust/blob/eba3228b2a9875d268ff3990903d04e19f6cdb0c/src/librustdoc/html/render/cache.rs#L175-L190>.
         json.replace("\\\\\"", "\\\"")
             .replace(r"\'", "'")
             .replace(r"\\", r"\")
@@ -138,6 +217,30 @@ fn load_raw(index: &str) -> Result<RawIndexData> {
     serde_json::from_str(&json).map_err(Into::into)
 }
 
+/// Convert from the index data into a more usable data structure that contains one full data set
+/// for each item of the crate.
+///
+/// The raw structure contains a data driven layout (likely to reduce size of the JSON format) what
+/// means that the data for a single entry is not contained in a single object but instead spread
+/// over vectors of data, each one representing one field.
+///
+/// Data for a single entry can be retrieved by index and this transformation does exactly that to
+/// get back a whole structure of information for each item.
+///
+/// ## Implementation
+///
+/// The separate elements of each item are combined back together with the [`Iterator::zip`] method.
+/// A nice side effect is that we don't have to cope for differences in vector sizes (which should
+/// not exist but can theoretically) as it stops as soon as one of the iterators returns [`None`].
+///
+/// The path field is only present if it changes compared to the previous item to reduce index size.
+/// The previous path is kept around thanks to the [`Iterator::fold`] method and only updated if the
+/// current path is present. Otherwise the old value is used. This increases data size but makes
+/// usage much more convenient and less error prone as the path doesn't need to be searched every
+/// time it is accessed.
+///
+/// Parent indexes are transformed from a `usize` into an `Option<usize>` to erase the special
+/// handling of the `0` value and indexes are reduced by `1` to allow proper indexing.
 fn transform(raw: RawIndexData) -> IndexData {
     IndexData {
         crates: raw
@@ -180,14 +283,33 @@ fn transform(raw: RawIndexData) -> IndexData {
     }
 }
 
-fn generate_mapping(data: IndexData) -> HashMap<String, HashMap<String, String>> {
+/// Generate a mapping from the transformed index data. This simply calls [`generate_crate_mapping`]
+/// for each crate in the index to do the actual transformation of item data.
+fn generate_mapping(data: IndexData) -> HashMap<String, BTreeMap<String, String>> {
     data.crates
         .into_iter()
         .map(|(name, data)| (name, generate_crate_mapping(data)))
         .collect()
 }
 
-fn generate_crate_mapping(data: CrateData) -> HashMap<String, String> {
+/// Generate the fully qualified name for each item in the crate data and its URL variant as used
+/// by `rustdoc`. This allows to get a direct mapping from FQN to URL path, which can further be
+/// used to create a permalink to the rustdoc page.
+///
+/// ## Implementation
+///
+/// The FQN is usually in the form of `<module>::<item>` where the module path can contain further
+/// `::`. If the item has a parent its form is `<module::<parent_item>::<item>`.
+///
+/// The URL path is slightly different, with additional information about the type. The basic form
+/// is `<module>/<type>.<item>.html` where the module can contain further slashes `/` and the type
+/// defines the item type like `Struct`, `Enum` and others.
+///
+/// If the item has a parent its form is `<module>/<parent_type>.<parent_item>.html#<type>.<item>`.
+/// The original type/item combination is replaced with the parent information and the actual item
+/// part is moved into a path fragment to become an anchor. That is, because an item with parent
+/// doesn't have its own page but is a part of the parents page.
+fn generate_crate_mapping(data: CrateData) -> BTreeMap<String, String> {
     let paths = data.paths;
 
     data.items
@@ -220,4 +342,39 @@ fn generate_crate_mapping(data: CrateData) -> HashMap<String, String> {
             (full_path, url)
         })
         .collect()
+}
+
+#[cfg(test)]
+mod tests {
+    use insta::glob;
+    use std::fs;
+
+    use super::*;
+
+    #[test]
+    fn test_load_raw() {
+        glob!("fixtures/*.js", |path| {
+            let input = fs::read_to_string(path).unwrap();
+            let data = load_raw(&input).unwrap();
+            insta::assert_yaml_snapshot!(data);
+        });
+    }
+
+    #[test]
+    fn test_transform() {
+        glob!("fixtures/*.js", |path| {
+            let input = fs::read_to_string(path).unwrap();
+            let data = transform(load_raw(&input).unwrap());
+            insta::assert_yaml_snapshot!(data);
+        });
+    }
+
+    #[test]
+    fn test_generate_mapping() {
+        glob!("fixtures/*.js", |path| {
+            let input = fs::read_to_string(path).unwrap();
+            let data = generate_mapping(transform(load_raw(&input).unwrap()));
+            insta::assert_yaml_snapshot!(data);
+        });
+    }
 }

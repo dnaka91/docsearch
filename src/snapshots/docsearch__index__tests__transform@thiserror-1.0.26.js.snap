@@ -1,0 +1,17 @@
+---
+source: src/index.rs
+expression: data
+input_file: src/fixtures/thiserror-1.0.26.js
+
+---
+crates:
+  thiserror:
+    doc: github crates-io docs-rs
+    items:
+      - ty: ProcDerive
+        name: Error
+        path: thiserror
+        desc: ""
+        parent_idx: ~
+    paths: []
+
