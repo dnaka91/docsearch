@@ -27,20 +27,19 @@
 )]
 #![allow(clippy::missing_errors_doc)]
 
-use std::{
-    collections::BTreeMap,
-    fmt::{self, Display},
-    str::FromStr,
-};
+use std::collections::BTreeMap;
 
 pub use semver::Version;
 use serde::{Deserialize, Serialize};
 
+pub use crate::fqn::{Fqn, ParseError as FqnParseError};
+
 mod crates;
+mod fqn;
 mod index;
 
 /// List of crates in the stdlib index.
-const STD_CRATES: &[&str] = &["alloc", "core", "proc_macro", "std", "test"];
+pub(crate) const STD_CRATES: &[&str] = &["alloc", "core", "proc_macro", "std", "test"];
 
 /// Custom result type of docsearch for convenience.
 pub type Result<T, E = Error> = std::result::Result<T, E>;
@@ -64,66 +63,6 @@ pub enum Error {
     InvalidVersionFormat(String),
 }
 
-/// Errors that can happen when parsing a [`Fqn`].
-#[derive(Debug, thiserror::Error)]
-pub enum FqnParseError {
-    #[error("The value is too short")]
-    TooShort,
-}
-
-/// Full qualified name an item within a crate like `std::vec::Vec` or `anyhow::Result`.
-///
-/// New FQNs are created by the [`FromStr`] trait:
-///
-/// ```rust
-/// "anyhow::Result".parse::<docsearch::Fqn>().unwrap();
-/// ```
-pub struct Fqn(String, usize);
-
-impl Fqn {
-    /// Get back the original string.
-    #[allow(clippy::missing_const_for_fn)]
-    #[must_use]
-    pub fn into_inner(self) -> String {
-        self.0
-    }
-
-    /// Crate name part of the fully qualified name.
-    ///
-    /// This can be used as argument for the [`search`] function.
-    #[must_use]
-    pub fn crate_name(&self) -> &str {
-        &self.0[..self.1]
-    }
-
-    /// Whether this FQN is for the stdlib.
-    #[must_use]
-    pub fn is_std(&self) -> bool {
-        STD_CRATES.contains(&self.crate_name())
-    }
-}
-
-impl FromStr for Fqn {
-    type Err = FqnParseError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        s.find("::")
-            .map_or(Err(Self::Err::TooShort), |idx| Ok(Self(s.to_owned(), idx)))
-    }
-}
-
-impl AsRef<str> for Fqn {
-    fn as_ref(&self) -> &str {
-        &self.0
-    }
-}
-
-impl Display for Fqn {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.0.fmt(f)
-    }
-}
-
 /// Parsed crate index that contains the mappings from [`Fqn`]s to their URL for direct linking.
 #[derive(Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Index {
@@ -140,7 +79,7 @@ pub struct Index {
 impl Index {
     #[must_use]
     pub fn find_link(&self, fqn: &Fqn) -> Option<String> {
-        self.mapping.get(&fqn.0).map(|link| {
+        self.mapping.get(fqn.as_ref()).map(|link| {
             if self.std {
                 format!("https://doc.rust-lang.org/nightly/{}", link)
             } else {
