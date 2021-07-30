@@ -67,14 +67,14 @@ pub enum Error {
 /// linking.
 #[derive(Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Index {
-    /// Name of the crate as a single index file can contain multiple crate indexes.
-    name: String,
-    /// Version of the parsed index.
-    version: Version,
+    /// Name of the crate.
+    pub name: String,
+    /// Version of the crate.
+    pub version: Version,
     /// Mapping from simple paths to URL paths.
-    mapping: BTreeMap<String, String>,
-    /// Whether this index is for the stdlib.
-    std: bool,
+    pub mapping: BTreeMap<String, String>,
+    /// Whether this index is for the standard library.
+    pub std: bool,
 }
 
 impl Index {
@@ -91,11 +91,6 @@ impl Index {
         } else {
             format!("https://docs.rs/{}/{}/{}", self.name, self.version, link)
         })
-    }
-
-    #[must_use]
-    pub fn name(&self) -> &str {
-        &self.name
     }
 }
 
