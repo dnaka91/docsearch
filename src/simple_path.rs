@@ -52,6 +52,11 @@ impl SimplePath {
     pub fn is_std(&self) -> bool {
         STD_CRATES.contains(&self.crate_name())
     }
+
+    /// Whether the path only contains the crate name and no item information.
+    pub(crate) fn is_crate_only(&self) -> bool {
+        self.0.len() == self.1
+    }
 }
 
 impl FromStr for SimplePath {

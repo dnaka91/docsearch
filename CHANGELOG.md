@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - ReleaseDate
 
+### Added
+
+- Paths that only contain the crate name with no item (like just `anyhow` or `std`), will now
+  resolve to the base crate docs instead of failing to find a link.
+
 ### Changed
 
 - Complete parsing logic for FQNs to match with the Rust spec.

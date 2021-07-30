@@ -80,12 +80,16 @@ pub struct Index {
 impl Index {
     #[must_use]
     pub fn find_link(&self, path: &SimplePath) -> Option<String> {
-        self.mapping.get(path.as_ref()).map(|link| {
-            if self.std {
-                format!("https://doc.rust-lang.org/nightly/{}", link)
-            } else {
-                format!("https://docs.rs/{}/{}/{}", self.name, self.version, link)
-            }
+        let link = if path.is_crate_only() {
+            path.crate_name()
+        } else {
+            self.mapping.get(path.as_ref())?
+        };
+
+        Some(if self.std {
+            format!("https://doc.rust-lang.org/nightly/{}", link)
+        } else {
+            format!("https://docs.rs/{}/{}/{}", self.name, self.version, link)
         })
     }
 
