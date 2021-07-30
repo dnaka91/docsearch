@@ -10,7 +10,7 @@ description = "Resolve crate items to rustdoc URLs."
 homepage = "https://github.com/dnaka91/docsearch"
 repository = "https://github.com/dnaka91/docsearch"
 categories = ["parser-implementations"]
-keywords = ["fqn", "mapping", "rustdoc", "search-index"]
+keywords = ["mapping", "rustdoc", "search-index"]
 include = ["src/**/*", "LICENSE", "README.md", "!**/fixtures/**/*", "!**/snapshots/**/*"]
 
 [dependencies]

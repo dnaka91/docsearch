@@ -1,16 +1,16 @@
 //! # docsearch
 //!
-//! Use the latest search index from `rustdoc` to find the docs.rs (or stdlib) URL for any item in
-//! a crate by its fully qualified name.
+//! Use the latest search index from `rustdoc` to find the docs.rs (or stdlib) URL for any item in a
+//! crate by its [simple path](https://doc.rust-lang.org/stable/reference/paths.html#simple-paths).
 //!
 //! ## Example
 //!
 //! ```no_run
 //! # #[tokio::main(flavor = "current_thread")]
 //! # async fn main() -> docsearch::Result<()> {
-//! let fqn = "anyhow::Result".parse::<docsearch::Fqn>().unwrap();
-//! let index = docsearch::search(fqn.crate_name(), None).await?;
-//! let link = index.find_link(&fqn).unwrap();
+//! let path = "anyhow::Result".parse::<docsearch::SimplePath>().unwrap();
+//! let index = docsearch::search(path.crate_name(), None).await?;
+//! let link = index.find_link(&path).unwrap();
 //!
 //! println!("{}", link);
 //! # Ok(())
@@ -32,11 +32,11 @@ use std::collections::BTreeMap;
 pub use semver::Version;
 use serde::{Deserialize, Serialize};
 
-pub use crate::fqn::{Fqn, ParseError as FqnParseError};
+pub use crate::simple_path::{ParseError, SimplePath};
 
 mod crates;
-mod fqn;
 mod index;
+mod simple_path;
 
 /// List of crates in the stdlib index.
 pub(crate) const STD_CRATES: &[&str] = &["alloc", "core", "proc_macro", "std", "test"];
@@ -63,14 +63,15 @@ pub enum Error {
     InvalidVersionFormat(String),
 }
 
-/// Parsed crate index that contains the mappings from [`Fqn`]s to their URL for direct linking.
+/// Parsed crate index that contains the mappings from [`SimplePath`]s to their URL for direct
+/// linking.
 #[derive(Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Index {
     /// Name of the crate as a single index file can contain multiple crate indexes.
     name: String,
     /// Version of the parsed index.
     version: Version,
-    /// Mapping from FQNs to URL paths.
+    /// Mapping from simple paths to URL paths.
     mapping: BTreeMap<String, String>,
     /// Whether this index is for the stdlib.
     std: bool,
@@ -78,8 +79,8 @@ pub struct Index {
 
 impl Index {
     #[must_use]
-    pub fn find_link(&self, fqn: &Fqn) -> Option<String> {
-        self.mapping.get(fqn.as_ref()).map(|link| {
+    pub fn find_link(&self, path: &SimplePath) -> Option<String> {
+        self.mapping.get(path.as_ref()).map(|link| {
             if self.std {
                 format!("https://doc.rust-lang.org/nightly/{}", link)
             } else {
@@ -95,7 +96,7 @@ impl Index {
 }
 
 /// Search for the given crate name and optionally a fixed version. This is the main entry point to
-/// retrieve an [`Index`] and further query that index for [`Fqn`]s.
+/// retrieve an [`Index`] and further query that index for [`SimplePath`]s.
 ///
 /// # Example
 ///
@@ -104,9 +105,9 @@ impl Index {
 /// ```no_run
 /// # #[tokio::main(flavor = "current_thread")]
 /// # async fn main() -> docsearch::Result<()> {
-/// let fqn = "anyhow::Result".parse::<docsearch::Fqn>().unwrap();
-/// let index = docsearch::search(fqn.crate_name(), None).await?;
-/// let link = index.find_link(&fqn).unwrap();
+/// let path = "anyhow::Result".parse::<docsearch::SimplePath>().unwrap();
+/// let index = docsearch::search(path.crate_name(), None).await?;
+/// let link = index.find_link(&path).unwrap();
 ///
 /// println!("{}", link);
 /// # Ok(())
@@ -122,9 +123,9 @@ pub async fn search(name: &str, version: Option<Version>) -> Result<Index> {
     Ok(transform(name, mapping, std)?)
 }
 
-/// Convert the downloaded index and convert it into a FQN to URL path mapping for each contained
-/// crate. Additionally attach some extra data like the version and whether the crate is considered
-/// part of the stdlib.
+/// Convert the downloaded index and convert it into a simple path to URL path mapping for each
+/// contained crate. Additionally attach some extra data like the version and whether the crate is
+/// considered part of the stdlib.
 fn transform(name: &str, (version, index): (Version, String), std: bool) -> Result<Index> {
     let mappings = index::load(&index)?;
 

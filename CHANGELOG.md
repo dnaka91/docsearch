@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Complete parsing logic for FQNs to match with the Rust spec.
+- Rename the `Fqn` type to `SimplePath` to have the same naming as the Rust spec.
 
 ## [0.1.1] - 2021-07-30
 

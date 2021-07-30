@@ -1,23 +1,23 @@
-//! Simple example that takes a FQN as argument, downloads the index and performs a single search
-//! for the FQN.
+//! Simple example that takes an item path as argument, downloads the index and performs a single
+//! search on the given argument.
 //!
 //! If everything goes well it prints the URL to the requested item.
 
 use std::env;
 
-use docsearch::{Fqn, Result};
+use docsearch::{SimplePath, Result};
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<()> {
     env::set_var("RUST_LOG", "docsearch=trace");
     env_logger::init();
 
-    let fqn = parse_args();
+    let path = parse_args();
 
-    let index = docsearch::search(fqn.crate_name(), None).await?;
-    let link = index.find_link(&fqn);
+    let index = docsearch::search(path.crate_name(), None).await?;
+    let link = index.find_link(&path);
 
-    println!("FQN:  {}", fqn);
+    println!("Path: {}", path);
 
     match link {
         Some(link) => println!("Link: {}", link),
@@ -28,9 +28,9 @@ async fn main() -> Result<()> {
 }
 
 /// Parse the arguments of this example. Uses panic for the sake of simplicity.
-fn parse_args() -> Fqn {
+fn parse_args() -> SimplePath {
     match env::args().nth(1) {
-        Some(fqn) => fqn.parse().unwrap(),
-        _ => panic!("Usage: cargo run --example search -- <fqn>"),
+        Some(path) => path.parse().unwrap(),
+        _ => panic!("Usage: cargo run --example search -- <path>"),
     }
 }

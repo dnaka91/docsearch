@@ -12,7 +12,7 @@
 [doc-url]: https://docs.rs/docsearch
 
 Use the latest search index from `rustdoc` to find the docs.rs (or stdlib) URL for any item in a
-crate by its fully qualified name.
+crate by its [simle path](https://doc.rust-lang.org/stable/reference/paths.html#simple-paths).
 
 ## Usage
 

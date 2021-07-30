@@ -1,5 +1,5 @@
 //! Handling of the index data and its transformation in a more usable format as well as a mapping
-//! of FQN to rustdoc URL.
+//! of simple paths to rustdoc URL.
 
 use std::collections::{BTreeMap, HashMap};
 
@@ -23,7 +23,7 @@ struct CrateData {
     doc: String,
     /// Data for each individual item of the crate.
     items: Vec<IndexItem>,
-    /// Parent paths that help to construct FQNs and URLs from item information.
+    /// Parent paths that help to construct full paths and URLs from item information.
     paths: Vec<(ItemType, String)>,
     // aliases
 }
@@ -163,7 +163,7 @@ struct RawCrateData {
     // a: aliases
 }
 
-/// Parse and transform a raw index file and convert it into mappings from FQNs to URLs that can be
+/// Parse and transform a raw index file and convert it into mappings from paths to URLs that can be
 /// used to generate permalinks to the items' docs page.
 ///
 /// This is the combination of the internal functions [`load_raw`], [`transform`] and
@@ -292,13 +292,13 @@ fn generate_mapping(data: IndexData) -> HashMap<String, BTreeMap<String, String>
         .collect()
 }
 
-/// Generate the fully qualified name for each item in the crate data and its URL variant as used
-/// by `rustdoc`. This allows to get a direct mapping from FQN to URL path, which can further be
-/// used to create a permalink to the rustdoc page.
+/// Generate the simple path for each item in the crate data and its URL variant as used by
+/// `rustdoc`. This allows to get a direct mapping from simple path to URL path, which can further
+/// be used to create a permalink to the rustdoc page.
 ///
 /// ## Implementation
 ///
-/// The FQN is usually in the form of `<module>::<item>` where the module path can contain further
+/// The path is usually in the form of `<module>::<item>` where the module path can contain further
 /// `::`. If the item has a parent its form is `<module::<parent_item>::<item>`.
 ///
 /// The URL path is slightly different, with additional information about the type. The basic form

@@ -1,3 +1,6 @@
+//! Implementation of the simple path according to the Rust spec as well as helpers in regards to
+//! this crate to make easy use of the path.
+
 use std::{
     fmt::{self, Display},
     str::FromStr,
@@ -7,10 +10,10 @@ use unicode_xid::UnicodeXID;
 
 use crate::STD_CRATES;
 
-/// Errors that can happen when parsing a [`Fqn`].
+/// Errors that can happen when parsing a [`SimplePath`].
 #[derive(Debug, thiserror::Error)]
 pub enum ParseError {
-    /// The value is too short to represent a FQN.
+    /// The value is too short to represent a simple path.
     #[error("The value is too short")]
     TooShort,
     /// One (and possibly more) of the segments aren't valid identifiers.
@@ -18,16 +21,17 @@ pub enum ParseError {
     InvalidIdentifier,
 }
 
-/// Full qualified name an item within a crate like `std::vec::Vec` or `anyhow::Result`.
+/// Path for any item within a crate (or just the crate itself) like `std::vec::Vec`,
+/// `anyhow::Result` or `thiserror`.
 ///
-/// New FQNs are created by the [`FromStr`] trait:
+/// New paths are created by the [`FromStr`] trait:
 ///
 /// ```rust
-/// "anyhow::Result".parse::<docsearch::Fqn>().unwrap();
+/// "anyhow::Result".parse::<docsearch::SimplePath>().unwrap();
 /// ```
-pub struct Fqn(String, usize);
+pub struct SimplePath(String, usize);
 
-impl Fqn {
+impl SimplePath {
     /// Get back the original string.
     #[allow(clippy::missing_const_for_fn)]
     #[must_use]
@@ -35,22 +39,22 @@ impl Fqn {
         self.0
     }
 
-    /// Crate name part of the fully qualified name.
+    /// Crate name part of this path.
     ///
-    /// This can be used as argument for the [`search`] function.
+    /// This can be used as argument for the [`search`](crate::search) function.
     #[must_use]
     pub fn crate_name(&self) -> &str {
         &self.0[..self.1]
     }
 
-    /// Whether this FQN is for the stdlib.
+    /// Whether this path is for the standard library.
     #[must_use]
     pub fn is_std(&self) -> bool {
         STD_CRATES.contains(&self.crate_name())
     }
 }
 
-impl FromStr for Fqn {
+impl FromStr for SimplePath {
     type Err = ParseError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -68,13 +72,13 @@ impl FromStr for Fqn {
     }
 }
 
-impl AsRef<str> for Fqn {
+impl AsRef<str> for SimplePath {
     fn as_ref(&self) -> &str {
         &self.0
     }
 }
 
-impl Display for Fqn {
+impl Display for SimplePath {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.0.fmt(f)
     }
@@ -182,7 +186,7 @@ mod tests {
         let inputs = &["anyhow", "anyhow::Result", "special::__", "__", "r#unsafe"];
 
         for input in inputs {
-            assert!(input.parse::<Fqn>().is_ok());
+            assert!(input.parse::<SimplePath>().is_ok());
         }
     }
 
@@ -191,7 +195,7 @@ mod tests {
         let inputs = &["", "a::::b", "::", "_", "unsafe", "Self", "r#Self"];
 
         for input in inputs {
-            assert!(input.parse::<Fqn>().is_err());
+            assert!(input.parse::<SimplePath>().is_err());
         }
     }
 }
