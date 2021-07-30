@@ -21,7 +21,7 @@ to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-docsearch = "0.1.0"
+docsearch = "0.1.1"
 ```
 
 In addition, you will need to use the lastest [tokio](https://tokio.rs) runtime to use this library
