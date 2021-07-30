@@ -34,6 +34,7 @@ use std::{
 };
 
 pub use semver::Version;
+use serde::{Deserialize, Serialize};
 
 mod crates;
 mod index;
@@ -124,7 +125,7 @@ impl Display for Fqn {
 }
 
 /// Parsed crate index that contains the mappings from [`Fqn`]s to their URL for direct linking.
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Index {
     /// Name of the crate as a single index file can contain multiple crate indexes.
     name: String,
