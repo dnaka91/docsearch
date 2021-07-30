@@ -1,6 +1,6 @@
 [package]
 name = "docsearch"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["Dominik Nakamura <dnaka91@gmail.com>"]
 edition = "2018"
 resolver = "2"
