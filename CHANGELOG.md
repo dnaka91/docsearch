@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - ReleaseDate
 
+### Changed
+
+- Derive `PartialEq`, `Eq` and `Hash` on the `Index` struct to make it hashable.
+- Derive `serde::Serialize` and `serde::Deserialize` on the `Index` struct.
+
 ## [0.1.0]
 
 ### Added
