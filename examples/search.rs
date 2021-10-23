@@ -5,7 +5,7 @@
 
 use std::env;
 
-use docsearch::{SimplePath, Result};
+use docsearch::{Result, SimplePath};
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<()> {

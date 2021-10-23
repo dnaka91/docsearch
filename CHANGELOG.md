@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - ReleaseDate
 
+### Changed
+
+- Update to Rust edition 2021 (bumping MSRV to `1.56`).
+
 ## [0.2.0] - 2021-07-30
 
 ### Added
