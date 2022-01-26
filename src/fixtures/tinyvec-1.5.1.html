@@ -1,0 +1,785 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="`tinyvec` provides 100% safe vec-like data structures."><meta name="keywords" content="rust, rustlang, rust-lang, tinyvec"><title>tinyvec - Rust</title><link rel="stylesheet" type="text/css" href="/normalize-20211108-1.58.0-nightly-495322d77.css"><link rel="stylesheet" href="/-/static/vendored.css?0-6-0-142844e-2022-01-23" type="text/css" media="all" />
+
+<link rel="stylesheet" type="text/css" href="/rustdoc-20211108-1.58.0-nightly-495322d77.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="/light-20211108-1.58.0-nightly-495322d77.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="/dark-20211108-1.58.0-nightly-495322d77.css" disabled ><link rel="stylesheet" type="text/css" href="/ayu-20211108-1.58.0-nightly-495322d77.css" disabled ><script id="default-settings" ></script><script src="/storage-20211108-1.58.0-nightly-495322d77.js"></script><script src="../crates-20211108-1.58.0-nightly-495322d77.js"></script><noscript><link rel="stylesheet" href="/noscript-20211108-1.58.0-nightly-495322d77.css"></noscript><link rel="alternate icon" type="image/png" href="/favicon-16x16-20211108-1.58.0-nightly-495322d77.png"><link rel="alternate icon" type="image/png" href="/favicon-32x32-20211108-1.58.0-nightly-495322d77.png"><link rel="icon" type="image/svg+xml" href="/favicon-20211108-1.58.0-nightly-495322d77.svg"><style type="text/css">#crate-search{background-image:url("/down-arrow-20211108-1.58.0-nightly-495322d77.svg");}</style><link rel="stylesheet" href="/-/static/rustdoc.css?0-6-0-142844e-2022-01-23" type="text/css" media="all" />
+
+        <link rel="search" href="/-/static/opensearch.xml" type="application/opensearchdescription+xml" title="Docs.rs" />
+
+        <script type="text/javascript">function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+}
+
+window.addEventListener('storage', function (ev) {
+  if (ev.key === 'rustdoc-theme') {
+    applyTheme(ev.newValue);
+  }
+});
+
+// see ./storage-change-detection.html for details
+window.addEventListener('message', function (ev) {
+  if (ev.data && ev.data.storage && ev.data.storage.key === 'rustdoc-theme') {
+    applyTheme(ev.data.storage.value);
+  }
+});
+
+applyTheme(window.localStorage.getItem('rustdoc-theme'));
+</script>
+</head><body class="rustdoc-page"><div class="nav-container">
+    <div class="container">
+        <div class="pure-menu pure-menu-horizontal" role="navigation" aria-label="Main navigation">
+            <form action="/releases/search"
+                  method="GET"
+                  class="landing-search-form-nav  ">
+                
+                <div id="search-input-nav" class="pure-menu-right">
+                    <label for="nav-search">
+                        <span class="fa-svg " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span>
+                    </label>
+
+                    
+                    
+                    <input id="nav-search" name="query" type="text" aria-label="Find crate by search query" tabindex="-1"
+                        placeholder="Find crate">
+                </div>
+
+                
+                <a href="/" class="pure-menu-heading pure-menu-link" aria-label="Docs.rs">
+                    <span title="Docs.rs"><span class="fa-svg " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M488.6 250.2L392 214V105.5c0-15-9.3-28.4-23.4-33.7l-100-37.5c-8.1-3.1-17.1-3.1-25.3 0l-100 37.5c-14.1 5.3-23.4 18.7-23.4 33.7V214l-96.6 36.2C9.3 255.5 0 268.9 0 283.9V394c0 13.6 7.7 26.1 19.9 32.2l100 50c10.1 5.1 22.1 5.1 32.2 0l103.9-52 103.9 52c10.1 5.1 22.1 5.1 32.2 0l100-50c12.2-6.1 19.9-18.6 19.9-32.2V283.9c0-15-9.3-28.4-23.4-33.7zM358 214.8l-85 31.9v-68.2l85-37v73.3zM154 104.1l102-38.2 102 38.2v.6l-102 41.4-102-41.4v-.6zm84 291.1l-85 42.5v-79.1l85-38.8v75.4zm0-112l-102 41.4-102-41.4v-.6l102-38.2 102 38.2v.6zm240 112l-85 42.5v-79.1l85-38.8v75.4zm0-112l-102 41.4-102-41.4v-.6l102-38.2 102 38.2v.6z"/></svg></span></span>
+                    <span class="title">Docs.rs</span>
+                </a><ul class="pure-menu-list pure-menu-right">
+                    <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover pure-menu-opt-children">
+                        <a href="/releases" class="pure-menu-link">
+                            <span title="Releases"><span class="fa-svg " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M546.2 9.7c-5.6-12.5-21.6-13-28.3-1.2C486.9 62.4 431.4 96 368 96h-80C182 96 96 182 96 288c0 7 .8 13.7 1.5 20.5C161.3 262.8 253.4 224 384 224c8.8 0 16 7.2 16 16s-7.2 16-16 16C132.6 256 26 410.1 2.4 468c-6.6 16.3 1.2 34.9 17.5 41.6 16.4 6.8 35-1.1 41.8-17.3 1.5-3.6 20.9-47.9 71.9-90.6 32.4 43.9 94 85.8 174.9 77.2C465.5 467.5 576 326.7 576 154.3c0-50.2-10.8-102.2-29.8-144.6z"/></svg></span></span>
+                            <span class="title">Releases</span>
+                        </a>
+
+                        <ul class="pure-menu-children">
+                            
+    <li class="pure-menu-item">
+        <a class="pure-menu-link " href="&#x2F;releases&#x2F;stars" >
+            Releases by Stars
+        </a>
+    </li>
+
+                            
+    <li class="pure-menu-item">
+        <a class="pure-menu-link " href="&#x2F;releases&#x2F;recent-failures" >
+            Recent Build Failures
+        </a>
+    </li>
+
+                            
+    <li class="pure-menu-item">
+        <a class="pure-menu-link " href="&#x2F;releases&#x2F;failures" >
+            Build Failures by Stars
+        </a>
+    </li>
+
+                            
+    <li class="pure-menu-item">
+        <a class="pure-menu-link " href="&#x2F;releases&#x2F;activity" >
+            Release Activity
+        </a>
+    </li>
+
+                        </ul>
+                    </li><li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover pure-menu-opt">
+                        <a href="https://www.rust-lang.org/" target="_blank" class="pure-menu-link">
+                            Rust
+                        </a>
+
+                        <ul class="pure-menu-children">
+                            
+    <li class="pure-menu-item">
+        <a class="pure-menu-link " href="https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;book&#x2F;" target="_blank">
+            The Book
+        </a>
+    </li>
+
+
+                            
+    <li class="pure-menu-item">
+        <a class="pure-menu-link " href="https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;std&#x2F;" target="_blank">
+            Standard Library API Reference
+        </a>
+    </li>
+
+
+                            
+    <li class="pure-menu-item">
+        <a class="pure-menu-link " href="https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;rust-by-example&#x2F;" target="_blank">
+            Rust by Example
+        </a>
+    </li>
+
+
+                            
+    <li class="pure-menu-item">
+        <a class="pure-menu-link menu-item-divided" href="https:&#x2F;&#x2F;rust-lang-nursery.github.io&#x2F;rust-cookbook&#x2F;" target="_blank">
+            Rust Cookbook
+        </a>
+    </li>
+
+
+                            
+    <li class="pure-menu-item">
+        <a class="pure-menu-link " href="https:&#x2F;&#x2F;crates.io" target="_blank">
+            Crates.io
+        </a>
+    </li>
+
+
+                            
+    <li class="pure-menu-item">
+        <a class="pure-menu-link " href="http:&#x2F;&#x2F;doc.crates.io&#x2F;guide.html" target="_blank">
+            The Cargo Guide
+        </a>
+    </li>
+
+                        </ul>
+                    </li>
+                </ul>
+<ul class="pure-menu-list"><li class="pure-menu-item pure-menu-has-children">
+            <a href="#" class="pure-menu-link crate-name" title="`tinyvec` provides 100% safe vec-like data structures.">
+                <span class="fa-svg " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M239.1 6.3l-208 78c-18.7 7-31.1 25-31.1 45v225.1c0 18.2 10.3 34.8 26.5 42.9l208 104c13.5 6.8 29.4 6.8 42.9 0l208-104c16.3-8.1 26.5-24.8 26.5-42.9V129.3c0-20-12.4-37.9-31.1-44.9l-208-78C262 2.2 250 2.2 239.1 6.3zM256 68.4l192 72v1.1l-192 78-192-78v-1.1l192-72zm32 356V275.5l160-65v133.9l-160 80z"/></svg></span>
+                <span class="title">tinyvec-1.5.1</span>
+            </a>
+
+            
+            <div class="pure-menu-children package-details-menu">
+                
+                <ul class="pure-menu-list menu-item-divided">
+                    <li class="pure-menu-heading" id="crate-title">
+                        tinyvec 1.5.1
+                        <span id="clipboard" class="fa-svg fa-svg-fw" title="Copy crate name and version information"><svg width="24" height="25" viewBox="0 0 24 25" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-label="Copy to clipboard"><path d="M18 20h2v3c0 1-1 2-2 2H2c-.998 0-2-1-2-2V5c0-.911.755-1.667 1.667-1.667h5A3.323 3.323 0 0110 0a3.323 3.323 0 013.333 3.333h5C19.245 3.333 20 4.09 20 5v8.333h-2V9H2v14h16v-3zM3 7h14c0-.911-.793-1.667-1.75-1.667H13.5c-.957 0-1.75-.755-1.75-1.666C11.75 2.755 10.957 2 10 2s-1.75.755-1.75 1.667c0 .911-.793 1.666-1.75 1.666H4.75C3.793 5.333 3 6.09 3 7z"/><path d="M4 19h6v2H4zM12 11H4v2h8zM4 17h4v-2H4zM15 15v-3l-4.5 4.5L15 21v-3l8.027-.032L23 15z"/></svg></span>
+                    </li><li class="pure-menu-item">
+                        <a href="/tinyvec/1.5.1/tinyvec/index.html" class="pure-menu-link description" id="permalink" title="Get a link to this specific version">
+                            <span class="fa-svg " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></span> Permalink
+                        </a>
+                    </li><li class="pure-menu-item">
+                        <a href="/crate/tinyvec/latest" class="pure-menu-link description" title="See tinyvec in docs.rs">
+                            <span class="fa-svg fa-svg-fw " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M239.1 6.3l-208 78c-18.7 7-31.1 25-31.1 45v225.1c0 18.2 10.3 34.8 26.5 42.9l208 104c13.5 6.8 29.4 6.8 42.9 0l208-104c16.3-8.1 26.5-24.8 26.5-42.9V129.3c0-20-12.4-37.9-31.1-44.9l-208-78C262 2.2 250 2.2 239.1 6.3zM256 68.4l192 72v1.1l-192 78-192-78v-1.1l192-72zm32 356V275.5l160-65v133.9l-160 80z"/></svg></span> Docs.rs crate page
+                        </a>
+                    </li>
+
+                    <li class="pure-menu-item">
+                        <a href="/crate/tinyvec/latest" class="pure-menu-link">
+                            <span class="fa-svg fa-svg-fw " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M96 464v32c0 8.84 7.16 16 16 16h224c8.84 0 16-7.16 16-16V153.25c4.56-2 8.92-4.35 12.99-7.12l142.05 47.63c8.38 2.81 17.45-1.71 20.26-10.08l10.17-30.34c2.81-8.38-1.71-17.45-10.08-20.26l-128.4-43.05c.42-3.32 1.01-6.6 1.01-10.03 0-44.18-35.82-80-80-80-29.69 0-55.3 16.36-69.11 40.37L132.96.83c-8.38-2.81-17.45 1.71-20.26 10.08l-10.17 30.34c-2.81 8.38 1.71 17.45 10.08 20.26l132 44.26c7.28 21.25 22.96 38.54 43.38 47.47V448H112c-8.84 0-16 7.16-16 16zM0 304c0 44.18 57.31 80 128 80s128-35.82 128-80h-.02c0-15.67 2.08-7.25-85.05-181.51-17.68-35.36-68.22-35.29-85.87 0C-1.32 295.27.02 287.82.02 304H0zm56-16l72-144 72 144H56zm328.02 144H384c0 44.18 57.31 80 128 80s128-35.82 128-80h-.02c0-15.67 2.08-7.25-85.05-181.51-17.68-35.36-68.22-35.29-85.87 0-86.38 172.78-85.04 165.33-85.04 181.51zM440 416l72-144 72 144H440z"/></svg></span> Zlib OR Apache-2.0 OR MIT
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="pure-g menu-item-divided">
+                    <div class="pure-u-1-2 right-border">
+                        <ul class="pure-menu-list">
+                            <li class="pure-menu-heading">Links</li>
+
+                            <li class="pure-menu-item">
+                                    <a href="https:&#x2F;&#x2F;github.com&#x2F;Lokathor&#x2F;tinyvec" class="pure-menu-link">
+                                        <span class="fa-svg fa-svg-fw " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M384 144c0-44.2-35.8-80-80-80s-80 35.8-80 80c0 36.4 24.3 67.1 57.5 76.8-.6 16.1-4.2 28.5-11 36.9-15.4 19.2-49.3 22.4-85.2 25.7-28.2 2.6-57.4 5.4-81.3 16.9v-144c32.5-10.2 56-40.5 56-76.3 0-44.2-35.8-80-80-80S0 35.8 0 80c0 35.8 23.5 66.1 56 76.3v199.3C23.5 365.9 0 396.2 0 432c0 44.2 35.8 80 80 80s80-35.8 80-80c0-34-21.2-63.1-51.2-74.6 3.1-5.2 7.8-9.8 14.9-13.4 16.2-8.2 40.4-10.4 66.1-12.8 42.2-3.9 90-8.4 118.2-43.4 14-17.4 21.1-39.8 21.6-67.9 31.6-10.8 54.4-40.7 54.4-75.9zM80 64c8.8 0 16 7.2 16 16s-7.2 16-16 16-16-7.2-16-16 7.2-16 16-16zm0 384c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16zm224-320c8.8 0 16 7.2 16 16s-7.2 16-16 16-16-7.2-16-16 7.2-16 16-16z"/></svg></span> Repository
+                                    </a>
+                                </li><li class="pure-menu-item">
+                                <a href="https://crates.io/crates/tinyvec" class="pure-menu-link" title="See tinyvec in crates.io">
+                                    <span class="fa-svg fa-svg-fw " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M239.1 6.3l-208 78c-18.7 7-31.1 25-31.1 45v225.1c0 18.2 10.3 34.8 26.5 42.9l208 104c13.5 6.8 29.4 6.8 42.9 0l208-104c16.3-8.1 26.5-24.8 26.5-42.9V129.3c0-20-12.4-37.9-31.1-44.9l-208-78C262 2.2 250 2.2 239.1 6.3zM256 68.4l192 72v1.1l-192 78-192-78v-1.1l192-72zm32 356V275.5l160-65v133.9l-160 80z"/></svg></span> Crates.io
+                                </a>
+                            </li>
+
+                            
+                            <li class="pure-menu-item">
+                                <a href="/crate/tinyvec/latest/source/" title="Browse source of tinyvec-1.5.1" class="pure-menu-link">
+                                    <span class="fa-svg fa-svg-fw " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M572.694 292.093L500.27 416.248A63.997 63.997 0 0 1 444.989 448H45.025c-18.523 0-30.064-20.093-20.731-36.093l72.424-124.155A64 64 0 0 1 152 256h399.964c18.523 0 30.064 20.093 20.73 36.093zM152 224h328v-48c0-26.51-21.49-48-48-48H272l-64-64H48C21.49 64 0 85.49 0 112v278.046l69.077-118.418C86.214 242.25 117.989 224 152 224z"/></svg></span> Source
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    
+                    <div class="pure-u-1-2">
+                        <ul class="pure-menu-list">
+                            <li class="pure-menu-heading">Owners</li><li class="pure-menu-item">
+                                    <a href="/releases/Lokathor" class="pure-menu-link">
+                                        <span class="fa-svg fa-svg-fw " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg></span> Lokathor
+                                    </a>
+                                </li><li class="pure-menu-item">
+                                    <a href="/releases/github:rust-bus:maintainers" class="pure-menu-link">
+                                        <span class="fa-svg fa-svg-fw " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg></span> github:rust-bus:maintainers
+                                    </a>
+                                </li></ul>
+                    </div>
+                </div>
+
+                <div class="pure-g menu-item-divided">
+                    <div class="pure-u-1-2 right-border">
+                        <ul class="pure-menu-list">
+                            <li class="pure-menu-heading">Dependencies</li>
+
+                            
+                            <li class="pure-menu-item">
+                                <div class="pure-menu pure-menu-scrollable sub-menu" tabindex="-1">
+                                    <ul class="pure-menu-list"><li class="pure-menu-item">
+                                                <a href="/arbitrary/^1" class="pure-menu-link">
+                                                    arbitrary ^1
+                                                    <i class="dependencies normal">normal</i>
+                                                </a>
+                                            </li><li class="pure-menu-item">
+                                                <a href="/serde/^1.0" class="pure-menu-link">
+                                                    serde ^1.0
+                                                    <i class="dependencies normal">normal</i>
+                                                </a>
+                                            </li><li class="pure-menu-item">
+                                                <a href="/tinyvec_macros/^0.1" class="pure-menu-link">
+                                                    tinyvec_macros ^0.1
+                                                    <i class="dependencies normal">normal</i>
+                                                </a>
+                                            </li><li class="pure-menu-item">
+                                                <a href="/criterion/^0.3.0" class="pure-menu-link">
+                                                    criterion ^0.3.0
+                                                    <i class="dependencies dev">dev</i>
+                                                </a>
+                                            </li><li class="pure-menu-item">
+                                                <a href="/serde_test/^1.0" class="pure-menu-link">
+                                                    serde_test ^1.0
+                                                    <i class="dependencies dev">dev</i>
+                                                </a>
+                                            </li><li class="pure-menu-item">
+                                                <a href="/smallvec/^1" class="pure-menu-link">
+                                                    smallvec ^1
+                                                    <i class="dependencies dev">dev</i>
+                                                </a>
+                                            </li></ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <ul class="pure-menu-list">
+                            <li class="pure-menu-heading">Versions</li>
+
+                            <li class="pure-menu-item">
+                                <div class="pure-menu pure-menu-scrollable sub-menu" tabindex="-1">
+                                    <ul class="pure-menu-list">
+                                        
+                                        
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.5.1/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.5.1
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.5.0/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.5.0
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.4.0/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.4.0
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.3.1/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.3.1
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.3.0/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.3.0
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.2.0/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.2.0
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.1.1/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.1.1
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.1.0/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.1.0
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.1.0-alpha.1/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.1.0-alpha.1
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.0.1/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.0.1
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.0.0/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.0.0
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.0.0-alpha.4/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.0.0-alpha.4
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.0.0-alpha.3/target-redirect/tinyvec/index.html"
+                class="pure-menu-link warn"
+                 title="docs.rs failed to build tinyvec-1.0.0-alpha.3"
+                data-fragment="retain"
+            >
+                
+                    <span class="fa-svg fa-svg-fw " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"/></svg></span>
+                
+                1.0.0-alpha.3
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.0.0-alpha.2/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                1.0.0-alpha.2
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/1.0.0-alpha.1/target-redirect/tinyvec/index.html"
+                class="pure-menu-link warn"
+                 title="docs.rs failed to build tinyvec-1.0.0-alpha.1"
+                data-fragment="retain"
+            >
+                
+                    <span class="fa-svg fa-svg-fw " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"/></svg></span>
+                
+                1.0.0-alpha.1
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.4.1/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.4.1
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.4.0/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.4.0
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.4.0-alpha.4/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.4.0-alpha.4
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.4.0-alpha.2/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.4.0-alpha.2
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.4.0-alpha.1/target-redirect/tinyvec/index.html"
+                class="pure-menu-link warn"
+                 title="tinyvec-0.4.0-alpha.1 is yanked"
+                data-fragment="retain"
+            >
+                
+                    <span class="fa-svg fa-svg-fw " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"/></svg></span>
+                
+                0.4.0-alpha.1
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.3.4/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.3.4
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.3.3/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.3.3
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.3.2/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.3.2
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.3.1/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.3.1
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.3.0/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.3.0
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.2.0/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.2.0
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.1.2/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.1.2
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.1.1/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.1.1
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.1.0/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.1.0
+            </a>
+        </li>
+        
+        
+        <li class="pure-menu-item">
+            <a
+                href="/crate/tinyvec/0.0.0/target-redirect/tinyvec/index.html"
+                class="pure-menu-link"
+                
+                data-fragment="retain"
+            >
+                
+                0.0.0
+            </a>
+        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                    <div class="pure-g">
+                        <div class="pure-u-1">
+                            <ul class="pure-menu-list">
+                                <li>
+                                    <a href="/crate/tinyvec/latest" class="pure-menu-link">
+                                        <b>100%</b>
+                                        of the crate is documented
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div></div>
+        </li><li class="pure-menu-item pure-menu-has-children">
+        <a href="#" class="pure-menu-link" aria-label="Platform">
+            <span class="fa-svg " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M512.1 191l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0L552 6.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zm-10.5-58.8c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.7-82.4 14.3-52.8 52.8zM386.3 286.1l33.7 16.8c10.1 5.8 14.5 18.1 10.5 29.1-8.9 24.2-26.4 46.4-42.6 65.8-7.4 8.9-20.2 11.1-30.3 5.3l-29.1-16.8c-16 13.7-34.6 24.6-54.9 31.7v33.6c0 11.6-8.3 21.6-19.7 23.6-24.6 4.2-50.4 4.4-75.9 0-11.5-2-20-11.9-20-23.6V418c-20.3-7.2-38.9-18-54.9-31.7L74 403c-10 5.8-22.9 3.6-30.3-5.3-16.2-19.4-33.3-41.6-42.2-65.7-4-10.9.4-23.2 10.5-29.1l33.3-16.8c-3.9-20.9-3.9-42.4 0-63.4L12 205.8c-10.1-5.8-14.6-18.1-10.5-29 8.9-24.2 26-46.4 42.2-65.8 7.4-8.9 20.2-11.1 30.3-5.3l29.1 16.8c16-13.7 34.6-24.6 54.9-31.7V57.1c0-11.5 8.2-21.5 19.6-23.5 24.6-4.2 50.5-4.4 76-.1 11.5 2 20 11.9 20 23.6v33.6c20.3 7.2 38.9 18 54.9 31.7l29.1-16.8c10-5.8 22.9-3.6 30.3 5.3 16.2 19.4 33.2 41.6 42.1 65.8 4 10.9.1 23.2-10 29.1l-33.7 16.8c3.9 21 3.9 42.5 0 63.5zm-117.6 21.1c59.2-77-28.7-164.9-105.7-105.7-59.2 77 28.7 164.9 105.7 105.7zm243.4 182.7l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0l8.2-14.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zM501.6 431c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.6-82.4 14.3-52.8 52.8z"/></svg></span>
+            <span class="title">Platform</span>
+        </a>
+
+        
+        <ul class="pure-menu-children"><li class="pure-menu-item">
+                    <a href="/crate/tinyvec/latest/target-redirect/x86_64-unknown-linux-gnu/tinyvec/index.html" class="pure-menu-link" data-fragment="retain" rel="nofollow">x86_64-unknown-linux-gnu</a>
+                </li><li class="pure-menu-item">
+                    <a href="/crate/tinyvec/latest/target-redirect/i686-pc-windows-msvc/tinyvec/index.html" class="pure-menu-link" data-fragment="retain" rel="nofollow">i686-pc-windows-msvc</a>
+                </li><li class="pure-menu-item">
+                    <a href="/crate/tinyvec/latest/target-redirect/i686-unknown-linux-gnu/tinyvec/index.html" class="pure-menu-link" data-fragment="retain" rel="nofollow">i686-unknown-linux-gnu</a>
+                </li><li class="pure-menu-item">
+                    <a href="/crate/tinyvec/latest/target-redirect/x86_64-apple-darwin/tinyvec/index.html" class="pure-menu-link" data-fragment="retain" rel="nofollow">x86_64-apple-darwin</a>
+                </li><li class="pure-menu-item">
+                    <a href="/crate/tinyvec/latest/target-redirect/x86_64-pc-windows-msvc/tinyvec/index.html" class="pure-menu-link" data-fragment="retain" rel="nofollow">x86_64-pc-windows-msvc</a>
+                </li></ul>
+    </li><li class="pure-menu-item">
+        <a href="/crate/tinyvec/latest/features" title="Browse available feature flags of tinyvec-1.5.1" class="pure-menu-link">
+            <span class="fa-svg " aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M349.565 98.783C295.978 98.783 251.721 64 184.348 64c-24.955 0-47.309 4.384-68.045 12.013a55.947 55.947 0 0 0 3.586-23.562C118.117 24.015 94.806 1.206 66.338.048 34.345-1.254 8 24.296 8 56c0 19.026 9.497 35.825 24 45.945V488c0 13.255 10.745 24 24 24h16c13.255 0 24-10.745 24-24v-94.4c28.311-12.064 63.582-22.122 114.435-22.122 53.588 0 97.844 34.783 165.217 34.783 48.169 0 86.667-16.294 122.505-40.858C506.84 359.452 512 349.571 512 339.045v-243.1c0-23.393-24.269-38.87-45.485-29.016-34.338 15.948-76.454 31.854-116.95 31.854z"/></svg></span>
+            <span class="title">Feature flags</span>
+        </a>
+    </li>
+    
+</ul>                
+                </form>
+        </div>
+    </div>
+</div>
+<div class="rustdoc mod crate container-rustdoc" id="rustdoc_body_wrapper" tabindex="-1"><script type="text/javascript" src="/-/static/menu.js?0-6-0-142844e-2022-01-23"></script>
+<script type="text/javascript" src="/-/static/index.js?0-6-0-142844e-2022-01-23"></script>
+
+<iframe src="/-/storage-change-detection.html" width="0" height="0" style="display: none"></iframe><div class="docs-rs-footer">
+    <a href="/about">About docs.rs</a>
+    <a href="https://foundation.rust-lang.org/policies/privacy-policy/#docs.rs">Privacy policy</a>
+    <a href="/releases/queue">Build queue</a>
+</div>
+<!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../tinyvec/index.html'><div class='logo-container rust-logo'><img src='/rust-logo-20211108-1.58.0-nightly-495322d77.png' alt='logo'></div></a><h2 class="location">Crate tinyvec</h2><div class="block version"><div class="narrow-helper"></div><p>Version 1.5.1</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all tinyvec's items</p></a><div class="block items"><ul><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li></ul></div><div id="sidebar-vars" data-name="tinyvec" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="/brush-20211108-1.58.0-nightly-495322d77.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="/wheel-20211108-1.58.0-nightly-495322d77.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">tinyvec</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="/clipboard-20211108-1.58.0-nightly-495322d77.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/tinyvec/lib.rs.html#1-107" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><code>tinyvec</code> provides 100% safe vec-like data structures.</p>
+<h3 id="provided-types" class="section-header"><a href="#provided-types">Provided Types</a></h3>
+<p>With no features enabled, this crate provides the <a href="struct.ArrayVec.html" title="ArrayVec"><code>ArrayVec</code></a> type, which
+is an array-backed storage. You can push values into the array and pop them
+out of the array and so on. If the array is made to overflow it will panic.</p>
+<p>Similarly, there is also a <a href="struct.SliceVec.html" title="SliceVec"><code>SliceVec</code></a> type available, which is a vec-like
+that’s backed by a slice you provide. You can add and remove elements, but
+if you overflow the slice it will panic.</p>
+<p>With the <code>alloc</code> feature enabled, the crate also has a <a href="enum.TinyVec.html" title="TinyVec"><code>TinyVec</code></a> type.
+This is an enum type which is either an <code>Inline(ArrayVec)</code> or a <code>Heap(Vec)</code>.
+If a <code>TinyVec</code> is <code>Inline</code> and would overflow it automatically transitions
+itself into being <code>Heap</code> mode instead of a panic.</p>
+<p>All of this is done with no <code>unsafe</code> code within the crate. Technically the
+<code>Vec</code> type from the standard library uses <code>unsafe</code> internally, but <em>this
+crate</em> introduces no new <code>unsafe</code> code into your project.</p>
+<p>The limitation is that the element type of a vec from this crate must
+support the <a href="https://doc.rust-lang.org/nightly/core/default/trait.Default.html" title="Default"><code>Default</code></a> trait. This means that this crate isn’t suitable for
+all situations, but a very surprising number of types do support <code>Default</code>.</p>
+<h3 id="other-features" class="section-header"><a href="#other-features">Other Features</a></h3>
+<ul>
+<li><code>grab_spare_slice</code> lets you get access to the “inactive” portions of an
+ArrayVec.</li>
+<li><code>rustc_1_40</code> makes the crate assume a minimum rust version of <code>1.40.0</code>,
+which allows some better internal optimizations.</li>
+<li><code>serde</code> provides a <code>Serialize</code> and <code>Deserialize</code> implementation for
+<a href="enum.TinyVec.html" title="TinyVec"><code>TinyVec</code></a> and <a href="struct.ArrayVec.html" title="ArrayVec"><code>ArrayVec</code></a> types, provided the inner item also has an
+implementation.</li>
+</ul>
+<h3 id="api" class="section-header"><a href="#api">API</a></h3>
+<p>The general goal of the crate is that, as much as possible, the vecs here
+should be a “drop in” replacement for the standard library <code>Vec</code> type. We
+strive to provide all of the <code>Vec</code> methods with the same names and
+signatures. The exception is that the element type of some methods will have
+a <code>Default</code> bound that’s not part of the normal <code>Vec</code> type.</p>
+<p>The vecs here also have a few additional methods that aren’t on the <code>Vec</code>
+type. In this case, the names tend to be fairly long so that they are
+unlikely to clash with any future methods added to <code>Vec</code>.</p>
+<h3 id="stability" class="section-header"><a href="#stability">Stability</a></h3>
+<ul>
+<li>The <code>1.0</code> series of the crate works with Rustc <code>1.34.0</code> or later, though
+you still need to have Rustc <code>1.36.0</code> to use the <code>alloc</code> feature.</li>
+<li>The <code>2.0</code> version of the crate is planned for some time after the
+<code>min_const_generics</code> stuff becomes stable. This would greatly raise the
+minimum rust version and also allow us to totally eliminate the need for
+the <code>Array</code> trait. The actual usage of the crate is not expected to break
+significantly in this transition.</li>
+</ul>
+</div></details><h2 id="macros" class="section-header"><a href="#macros">Macros</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.array_vec.html" title="tinyvec::array_vec macro">array_vec</a></div><div class="item-right docblock-short"><p>Helper to make an <code>ArrayVec</code>.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="macro" href="macro.tiny_vec.html" title="tinyvec::tiny_vec macro">tiny_vec</a><span class="stab portability" title="This is supported on crate feature `alloc` only"><code>alloc</code></span></div><div class="item-right docblock-short"><p>Helper to make a <code>TinyVec</code>.</p>
+</div></div></div><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.ArrayVec.html" title="tinyvec::ArrayVec struct">ArrayVec</a></div><div class="item-right docblock-short"><p>An array-backed, vector-like data structure.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.ArrayVecDrain.html" title="tinyvec::ArrayVecDrain struct">ArrayVecDrain</a></div><div class="item-right docblock-short"><p>Draining iterator for <a href="struct.ArrayVec.html" title="ArrayVec"><code>ArrayVec</code></a></p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.ArrayVecIterator.html" title="tinyvec::ArrayVecIterator struct">ArrayVecIterator</a></div><div class="item-right docblock-short"><p>Iterator for consuming an <code>ArrayVec</code> and returning owned elements.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.ArrayVecSplice.html" title="tinyvec::ArrayVecSplice struct">ArrayVecSplice</a></div><div class="item-right docblock-short"><p>Splicing iterator for <code>ArrayVec</code>
+See <a href="struct.ArrayVec.html#method.splice"><code>ArrayVec::splice</code></a></p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.SliceVec.html" title="tinyvec::SliceVec struct">SliceVec</a></div><div class="item-right docblock-short"><p>A slice-backed vector-like data structure.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.SliceVecDrain.html" title="tinyvec::SliceVecDrain struct">SliceVecDrain</a></div><div class="item-right docblock-short"><p>Draining iterator for <a href="struct.SliceVec.html" title="SliceVec"><code>SliceVec</code></a></p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.TinyVecSplice.html" title="tinyvec::TinyVecSplice struct">TinyVecSplice</a><span class="stab portability" title="This is supported on crate feature `alloc` only"><code>alloc</code></span></div><div class="item-right docblock-short"><p>Splicing iterator for <code>TinyVec</code>
+See <a href="enum.TinyVec.html#method.splice"><code>TinyVec::splice</code></a></p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.TryFromSliceError.html" title="tinyvec::TryFromSliceError struct">TryFromSliceError</a></div><div class="item-right docblock-short"><p>The error type returned when a conversion from a slice to an <a href="struct.ArrayVec.html" title="ArrayVec"><code>ArrayVec</code></a>
+fails.</p>
+</div></div></div><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.TinyVec.html" title="tinyvec::TinyVec enum">TinyVec</a><span class="stab portability" title="This is supported on crate feature `alloc` only"><code>alloc</code></span></div><div class="item-right docblock-short"><p>A vector that starts inline, but can automatically move to the heap.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.TinyVecDrain.html" title="tinyvec::TinyVecDrain enum">TinyVecDrain</a><span class="stab portability" title="This is supported on crate feature `alloc` only"><code>alloc</code></span></div><div class="item-right docblock-short"><p>Draining iterator for <code>TinyVecDrain</code></p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.TinyVecIterator.html" title="tinyvec::TinyVecIterator enum">TinyVecIterator</a><span class="stab portability" title="This is supported on crate feature `alloc` only"><code>alloc</code></span></div><div class="item-right docblock-short"><p>Iterator for consuming an <code>TinyVec</code> and returning owned elements.</p>
+</div></div></div><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.Array.html" title="tinyvec::Array trait">Array</a></div><div class="item-right docblock-short"><p>A trait for types that are an array.</p>
+</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="tinyvec" data-search-index-js="../search-index-20211108-1.58.0-nightly-495322d77.js" data-search-js="/search-20211108-1.58.0-nightly-495322d77.js"></div>
+    <script src="/main-20211108-1.58.0-nightly-495322d77.js"></script>
+</div></body></html>

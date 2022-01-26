@@ -6,10 +6,12 @@
 //! ## Example
 //!
 //! ```no_run
+//! use docsearch::{Result, SimplePath, Version};
+//!
 //! # #[tokio::main(flavor = "current_thread")]
-//! # async fn main() -> docsearch::Result<()> {
-//! let path = "anyhow::Result".parse::<docsearch::SimplePath>().unwrap();
-//! let index = docsearch::search(path.crate_name(), None).await?;
+//! # async fn main() -> Result<()> {
+//! let path = "anyhow::Result".parse::<SimplePath>().unwrap();
+//! let index = docsearch::search(path.crate_name(), Version::Latest).await?;
 //! let link = index.find_link(&path).unwrap();
 //!
 //! println!("{}", link);
@@ -29,14 +31,15 @@
 
 use std::collections::BTreeMap;
 
-pub use semver::Version;
 use serde::{Deserialize, Serialize};
 
 pub use crate::simple_path::{ParseError, SimplePath};
+pub use crate::version::Version;
 
 mod crates;
 mod index;
 mod simple_path;
+mod version;
 
 /// List of crates in the stdlib index.
 pub(crate) const STD_CRATES: &[&str] = &["alloc", "core", "proc_macro", "std", "test"];
@@ -102,17 +105,19 @@ impl Index {
 /// Download the index for the `anhow` crate and get the docs.rs link for the `anyhow::Result` item.
 ///
 /// ```no_run
+/// use docsearch::{Result, SimplePath, Version};
+///
 /// # #[tokio::main(flavor = "current_thread")]
-/// # async fn main() -> docsearch::Result<()> {
-/// let path = "anyhow::Result".parse::<docsearch::SimplePath>().unwrap();
-/// let index = docsearch::search(path.crate_name(), None).await?;
+/// # async fn main() -> Result<()> {
+/// let path = "anyhow::Result".parse::<SimplePath>().unwrap();
+/// let index = docsearch::search(path.crate_name(), Version::Latest).await?;
 /// let link = index.find_link(&path).unwrap();
 ///
 /// println!("{}", link);
 /// # Ok(())
 /// # }
 /// ```
-pub async fn search(name: &str, version: Option<Version>) -> Result<Index> {
+pub async fn search(name: &str, version: Version) -> Result<Index> {
     let (mapping, std) = if STD_CRATES.contains(&name) {
         (crates::get_std().await?, true)
     } else {

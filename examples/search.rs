@@ -5,7 +5,7 @@
 
 use std::env;
 
-use docsearch::{Result, SimplePath};
+use docsearch::{Result, SimplePath,Version};
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<()> {
@@ -14,7 +14,7 @@ async fn main() -> Result<()> {
 
     let path = parse_args();
 
-    let index = docsearch::search(path.crate_name(), None).await?;
+    let index = docsearch::search(path.crate_name(), Version::Latest).await?;
     let link = index.find_link(&path);
 
     println!("Path: {}", path);

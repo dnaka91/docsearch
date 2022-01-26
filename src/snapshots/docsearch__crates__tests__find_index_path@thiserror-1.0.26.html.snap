@@ -1,0 +1,9 @@
+---
+source: src/crates.rs
+assertion_line: 125
+expression: data
+input_file: src/fixtures/thiserror-1.0.26.html
+
+---
+search-index-20210702-1.55.0-nightly-798baebde.js
+

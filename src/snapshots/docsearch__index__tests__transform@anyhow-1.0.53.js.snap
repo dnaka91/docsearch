@@ -1,0 +1,289 @@
+---
+source: src/index.rs
+assertion_line: 369
+expression: data
+input_file: src/fixtures/anyhow-1.0.53.js
+
+---
+crates:
+  anyhow:
+    doc: github crates-io docs-rs
+    items:
+      - ty: Struct
+        name: Chain
+        path: anyhow
+        desc: Iterator of a chain of source errors.
+        parent_idx: ~
+      - ty: Trait
+        name: Context
+        path: anyhow
+        desc: Provides the <code>context</code> method for <code>Result</code>.
+        parent_idx: ~
+      - ty: Struct
+        name: Error
+        path: anyhow
+        desc: "The <code>Error</code> type, a wrapper around a dynamic error type."
+        parent_idx: ~
+      - ty: Function
+        name: Ok
+        path: anyhow
+        desc: "Equivalent to Ok::&lt;_, anyhow::Error&gt;(value)."
+        parent_idx: ~
+      - ty: Typedef
+        name: Result
+        path: anyhow
+        desc: "<code>Result&lt;T, Error&gt;</code>"
+        parent_idx: ~
+      - ty: Macro
+        name: anyhow
+        path: anyhow
+        desc: Construct an ad-hoc error from a string or existing non-…
+        parent_idx: ~
+      - ty: Method
+        name: as_ref
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: as_ref
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: backtrace
+        path: anyhow
+        desc: Get the backtrace for this Error.
+        parent_idx: 0
+      - ty: Macro
+        name: bail
+        path: anyhow
+        desc: Return early with an error.
+        parent_idx: ~
+      - ty: Method
+        name: borrow
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: borrow
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: borrow_mut
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: borrow_mut
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: chain
+        path: anyhow
+        desc: An iterator of the chain of source errors contained by …
+        parent_idx: 0
+      - ty: Method
+        name: clone
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: clone_into
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: TyMethod
+        name: context
+        path: anyhow
+        desc: Wrap the error value with additional context.
+        parent_idx: 2
+      - ty: Method
+        name: context
+        path: anyhow
+        desc: Wrap the error value with additional context.
+        parent_idx: 0
+      - ty: Method
+        name: default
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: deref
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: deref_mut
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: downcast
+        path: anyhow
+        desc: Attempt to downcast the error object to a concrete type.
+        parent_idx: 0
+      - ty: Method
+        name: downcast_mut
+        path: anyhow
+        desc: Downcast this error object by mutable reference.
+        parent_idx: 0
+      - ty: Method
+        name: downcast_ref
+        path: anyhow
+        desc: Downcast this error object by reference.
+        parent_idx: 0
+      - ty: Method
+        name: drop
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Macro
+        name: ensure
+        path: anyhow
+        desc: Return early with an error if a condition is not satisfied.
+        parent_idx: ~
+      - ty: Method
+        name: fmt
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: fmt
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: from
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: from
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: from
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: from
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: into
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: into
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: into_iter
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: is
+        path: anyhow
+        desc: Returns true if <code>E</code> is the type held by this error object.
+        parent_idx: 0
+      - ty: Method
+        name: len
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: msg
+        path: anyhow
+        desc: Create a new error object from a printable error message.
+        parent_idx: 0
+      - ty: Method
+        name: new
+        path: anyhow
+        desc: Create a new error object from any error type.
+        parent_idx: 0
+      - ty: Method
+        name: new
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: next
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: next_back
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: root_cause
+        path: anyhow
+        desc: The lowest level cause of this error — this error’s …
+        parent_idx: 0
+      - ty: Method
+        name: size_hint
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: to_owned
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: to_string
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: try_from
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: try_from
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: try_into
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: try_into
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: type_id
+        path: anyhow
+        desc: ""
+        parent_idx: 0
+      - ty: Method
+        name: type_id
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: TyMethod
+        name: with_context
+        path: anyhow
+        desc: Wrap the error value with additional context that is …
+        parent_idx: 2
+    paths:
+      - - Struct
+        - Error
+      - - Struct
+        - Chain
+      - - Trait
+        - Context
+

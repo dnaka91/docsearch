@@ -1,0 +1,1889 @@
+---
+source: src/index.rs
+assertion_line: 369
+expression: data
+input_file: src/fixtures/tinyvec-1.5.1.js
+
+---
+crates:
+  tinyvec:
+    doc: "<code>tinyvec</code> provides 100% safe vec-like data structures."
+    items:
+      - ty: Trait
+        name: Array
+        path: tinyvec
+        desc: A trait for types that are an array.
+        parent_idx: ~
+      - ty: Struct
+        name: ArrayVec
+        path: tinyvec
+        desc: "An array-backed, vector-like data structure."
+        parent_idx: ~
+      - ty: Struct
+        name: ArrayVecDrain
+        path: tinyvec
+        desc: Draining iterator for <code>ArrayVec</code>
+        parent_idx: ~
+      - ty: Struct
+        name: ArrayVecIterator
+        path: tinyvec
+        desc: Iterator for consuming an <code>ArrayVec</code> and returning owned …
+        parent_idx: ~
+      - ty: Struct
+        name: ArrayVecSplice
+        path: tinyvec
+        desc: "Splicing iterator for <code>ArrayVec</code> See <code>ArrayVec::splice</code>"
+        parent_idx: ~
+      - ty: AssocConst
+        name: CAPACITY
+        path: tinyvec
+        desc: The number of slots in the thing.
+        parent_idx: 0
+      - ty: AssocConst
+        name: CAPACITY
+        path: tinyvec
+        desc: The number of slots in the thing.
+        parent_idx: 0
+      - ty: Variant
+        name: Heap
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Variant
+        name: Heap
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Variant
+        name: Heap
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Variant
+        name: Inline
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Variant
+        name: Inline
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Variant
+        name: Inline
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: AssocType
+        name: Item
+        path: tinyvec
+        desc: The type of the items in the thing.
+        parent_idx: 0
+      - ty: Struct
+        name: SliceVec
+        path: tinyvec
+        desc: A slice-backed vector-like data structure.
+        parent_idx: ~
+      - ty: Struct
+        name: SliceVecDrain
+        path: tinyvec
+        desc: Draining iterator for <code>SliceVec</code>
+        parent_idx: ~
+      - ty: Enum
+        name: TinyVec
+        path: tinyvec
+        desc: "A vector that starts inline, but can automatically move to …"
+        parent_idx: ~
+      - ty: Enum
+        name: TinyVecDrain
+        path: tinyvec
+        desc: Draining iterator for <code>TinyVecDrain</code>
+        parent_idx: ~
+      - ty: Enum
+        name: TinyVecIterator
+        path: tinyvec
+        desc: Iterator for consuming an <code>TinyVec</code> and returning owned …
+        parent_idx: ~
+      - ty: Struct
+        name: TinyVecSplice
+        path: tinyvec
+        desc: "Splicing iterator for <code>TinyVec</code> See <code>TinyVec::splice</code>"
+        parent_idx: ~
+      - ty: Struct
+        name: TryFromSliceError
+        path: tinyvec
+        desc: The error type returned when a conversion from a slice to …
+        parent_idx: ~
+      - ty: Method
+        name: append
+        path: tinyvec
+        desc: Move all values from <code>other</code> into this vec.
+        parent_idx: 4
+      - ty: Method
+        name: append
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: append
+        path: tinyvec
+        desc: Move all values from <code>other</code> into this vec.
+        parent_idx: 1
+      - ty: Macro
+        name: array_vec
+        path: tinyvec
+        desc: Helper to make an <code>ArrayVec</code>.
+        parent_idx: ~
+      - ty: Macro
+        name: array_vec
+        path: tinyvec
+        desc: Helper to make an <code>ArrayVec</code>.
+        parent_idx: ~
+      - ty: Method
+        name: as_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: as_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: as_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: as_mut_ptr
+        path: tinyvec
+        desc: A <code>*mut</code> pointer to the backing array.
+        parent_idx: 4
+      - ty: Method
+        name: as_mut_ptr
+        path: tinyvec
+        desc: A <code>*mut</code> pointer to the backing slice.
+        parent_idx: 5
+      - ty: Method
+        name: as_mut_ptr
+        path: tinyvec
+        desc: A mutable pointer to the backing array.
+        parent_idx: 1
+      - ty: Method
+        name: as_mut_slice
+        path: tinyvec
+        desc: "Performs a <code>deref_mut</code>, into unique slice form."
+        parent_idx: 4
+      - ty: Method
+        name: as_mut_slice
+        path: tinyvec
+        desc: "Performs a <code>deref_mut</code>, into unique slice form."
+        parent_idx: 5
+      - ty: Method
+        name: as_mut_slice
+        path: tinyvec
+        desc: Helper for getting the mut slice.
+        parent_idx: 1
+      - ty: Method
+        name: as_ptr
+        path: tinyvec
+        desc: A <code>*const</code> pointer to the backing array.
+        parent_idx: 4
+      - ty: Method
+        name: as_ptr
+        path: tinyvec
+        desc: A <code>*const</code> pointer to the backing slice.
+        parent_idx: 5
+      - ty: Method
+        name: as_ptr
+        path: tinyvec
+        desc: A const pointer to the backing array.
+        parent_idx: 1
+      - ty: Method
+        name: as_ref
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: as_ref
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: as_ref
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: TyMethod
+        name: as_slice
+        path: tinyvec
+        desc: Gives a shared slice over the whole thing.
+        parent_idx: 0
+      - ty: Method
+        name: as_slice
+        path: tinyvec
+        desc: "Performs a <code>deref</code>, into shared slice form."
+        parent_idx: 4
+      - ty: Method
+        name: as_slice
+        path: tinyvec
+        desc: Returns the remaining items of this iterator as a slice.
+        parent_idx: 6
+      - ty: Method
+        name: as_slice
+        path: tinyvec
+        desc: "Performs a <code>deref</code>, into shared slice form."
+        parent_idx: 5
+      - ty: Method
+        name: as_slice
+        path: tinyvec
+        desc: Helper for getting the shared slice.
+        parent_idx: 1
+      - ty: Method
+        name: as_slice
+        path: tinyvec
+        desc: Returns the remaining items of this iterator as a slice.
+        parent_idx: 3
+      - ty: TyMethod
+        name: as_slice_mut
+        path: tinyvec
+        desc: Gives a unique slice over the whole thing.
+        parent_idx: 0
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 9
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: borrow
+        path: tinyvec
+        desc: ""
+        parent_idx: 11
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 9
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: borrow_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 11
+      - ty: Method
+        name: capacity
+        path: tinyvec
+        desc: The capacity of the <code>ArrayVec</code>.
+        parent_idx: 4
+      - ty: Method
+        name: capacity
+        path: tinyvec
+        desc: The capacity of the <code>SliceVec</code>.
+        parent_idx: 5
+      - ty: Method
+        name: capacity
+        path: tinyvec
+        desc: The capacity of the <code>TinyVec</code>.
+        parent_idx: 1
+      - ty: Method
+        name: clear
+        path: tinyvec
+        desc: Truncates the <code>ArrayVec</code> down to length 0.
+        parent_idx: 4
+      - ty: Method
+        name: clear
+        path: tinyvec
+        desc: Truncates the <code>SliceVec</code> down to length 0.
+        parent_idx: 5
+      - ty: Method
+        name: clear
+        path: tinyvec
+        desc: Removes all elements from the vec.
+        parent_idx: 1
+      - ty: Method
+        name: clone
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: clone
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: clone
+        path: tinyvec
+        desc: ""
+        parent_idx: 11
+      - ty: Method
+        name: clone_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: clone_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: clone_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: clone_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: clone_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 11
+      - ty: Method
+        name: cmp
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: cmp
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: cmp
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: count
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: count
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: count
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: TyMethod
+        name: default
+        path: tinyvec
+        desc: "Create a default-initialized instance of ourself, similar …"
+        parent_idx: 0
+      - ty: Method
+        name: default
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: default
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: default
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: deref
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: deref
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: deref
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: deref_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: deref_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: deref_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: deserialize
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: deserialize
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: drain
+        path: tinyvec
+        desc: Creates a draining iterator that removes the specified …
+        parent_idx: 4
+      - ty: Method
+        name: drain
+        path: tinyvec
+        desc: Creates a draining iterator that removes the specified …
+        parent_idx: 5
+      - ty: Method
+        name: drain
+        path: tinyvec
+        desc: Creates a draining iterator that removes the specified …
+        parent_idx: 1
+      - ty: Method
+        name: drain_to_vec
+        path: tinyvec
+        desc: Drains all elements to a Vec
+        parent_idx: 4
+      - ty: Method
+        name: drain_to_vec_and_reserve
+        path: tinyvec
+        desc: "Drains all elements to a Vec, but reserves additional space"
+        parent_idx: 4
+      - ty: Method
+        name: drop
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: drop
+        path: tinyvec
+        desc: ""
+        parent_idx: 9
+      - ty: Method
+        name: drop
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: eq
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: eq
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: eq
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: eq
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: eq
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: eq
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: eq
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: eq
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: extend
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: extend
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: extend
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: extend_from_slice
+        path: tinyvec
+        desc: Clone each element of the slice into this <code>ArrayVec</code>.
+        parent_idx: 4
+      - ty: Method
+        name: extend_from_slice
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: extend_from_slice
+        path: tinyvec
+        desc: Clone each element of the slice into this vec.
+        parent_idx: 1
+      - ty: Method
+        name: fill
+        path: tinyvec
+        desc: Fill the vector until its capacity has been reached.
+        parent_idx: 4
+      - ty: Method
+        name: fill
+        path: tinyvec
+        desc: Fill the vector until its capacity has been reached.
+        parent_idx: 5
+      - ty: Method
+        name: flush
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: fmt
+        path: tinyvec
+        desc: ""
+        parent_idx: 11
+      - ty: Method
+        name: for_each
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: for_each
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: The output has a length equal to the full array.
+        parent_idx: 4
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: "Calls <code>AsRef::as_mut</code> then uses the full slice as the …"
+        parent_idx: 5
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: Uses the full slice as the initial length.
+        parent_idx: 5
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 9
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: from
+        path: tinyvec
+        desc: ""
+        parent_idx: 11
+      - ty: Method
+        name: from_array_empty
+        path: tinyvec
+        desc: Wraps up an array as a new empty <code>ArrayVec</code>.
+        parent_idx: 4
+      - ty: Method
+        name: from_array_len
+        path: tinyvec
+        desc: Wraps up an array and uses the given length as the initial …
+        parent_idx: 4
+      - ty: Method
+        name: from_array_len
+        path: tinyvec
+        desc: Wraps up an array and uses the given length as the initial …
+        parent_idx: 1
+      - ty: Method
+        name: from_iter
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: from_iter
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: from_slice_len
+        path: tinyvec
+        desc: Wraps up a slice and uses the given length as the initial …
+        parent_idx: 5
+      - ty: Method
+        name: grab_spare_slice
+        path: tinyvec
+        desc: Obtain the shared slice of the array <em>after</em> the active …
+        parent_idx: 4
+      - ty: Method
+        name: grab_spare_slice
+        path: tinyvec
+        desc: Obtain the shared slice of the array <em>after</em> the active …
+        parent_idx: 5
+      - ty: Method
+        name: grab_spare_slice_mut
+        path: tinyvec
+        desc: Obtain the mutable slice of the array <em>after</em> the active …
+        parent_idx: 4
+      - ty: Method
+        name: grab_spare_slice_mut
+        path: tinyvec
+        desc: Obtain the mutable slice of the array <em>after</em> the active …
+        parent_idx: 5
+      - ty: Method
+        name: hash
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: hash
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: hash
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: index
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: index
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: index
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: index_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: index_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: index_mut
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: insert
+        path: tinyvec
+        desc: "Inserts an item at the position given, moving all …"
+        parent_idx: 4
+      - ty: Method
+        name: insert
+        path: tinyvec
+        desc: "Inserts an item at the position given, moving all …"
+        parent_idx: 5
+      - ty: Method
+        name: insert
+        path: tinyvec
+        desc: "Inserts an item at the position given, moving all …"
+        parent_idx: 1
+      - ty: Method
+        name: into
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: into
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: into
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: into
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: into
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: into
+        path: tinyvec
+        desc: ""
+        parent_idx: 9
+      - ty: Method
+        name: into
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: into
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: into
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: into
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: into
+        path: tinyvec
+        desc: ""
+        parent_idx: 11
+      - ty: Method
+        name: into_inner
+        path: tinyvec
+        desc: Returns the inner array of the <code>ArrayVec</code>.
+        parent_idx: 4
+      - ty: Method
+        name: into_iter
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: into_iter
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: into_iter
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: into_iter
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: into_iter
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: into_iter
+        path: tinyvec
+        desc: ""
+        parent_idx: 9
+      - ty: Method
+        name: into_iter
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: into_iter
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: into_iter
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: into_iter
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: is_empty
+        path: tinyvec
+        desc: Checks if the length is 0.
+        parent_idx: 4
+      - ty: Method
+        name: is_empty
+        path: tinyvec
+        desc: Checks if the length is 0.
+        parent_idx: 5
+      - ty: Method
+        name: is_empty
+        path: tinyvec
+        desc: If the vec is empty.
+        parent_idx: 1
+      - ty: Method
+        name: is_heap
+        path: tinyvec
+        desc: Returns whether elements are on heap
+        parent_idx: 1
+      - ty: Method
+        name: is_inline
+        path: tinyvec
+        desc: Returns whether elements are on stack
+        parent_idx: 1
+      - ty: Method
+        name: last
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: last
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: last
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: last
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: len
+        path: tinyvec
+        desc: The length of the <code>ArrayVec</code> (in elements).
+        parent_idx: 4
+      - ty: Method
+        name: len
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: len
+        path: tinyvec
+        desc: The length of the <code>SliceVec</code> (in elements).
+        parent_idx: 5
+      - ty: Method
+        name: len
+        path: tinyvec
+        desc: The length of the vec (in elements).
+        parent_idx: 1
+      - ty: Method
+        name: len
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: move_to_the_heap
+        path: tinyvec
+        desc: "Moves the content of the TinyVec to the heap, if it’s …"
+        parent_idx: 1
+      - ty: Method
+        name: move_to_the_heap_and_reserve
+        path: tinyvec
+        desc: "If TinyVec is inline, moves the content of it to the heap. …"
+        parent_idx: 1
+      - ty: Method
+        name: new
+        path: tinyvec
+        desc: "Makes a new, empty <code>ArrayVec</code>."
+        parent_idx: 4
+      - ty: Method
+        name: new
+        path: tinyvec
+        desc: "Makes a new, empty vec."
+        parent_idx: 1
+      - ty: Method
+        name: next
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: next
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: next
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: next
+        path: tinyvec
+        desc: ""
+        parent_idx: 9
+      - ty: Method
+        name: next
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: next
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: next
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: next_back
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: next_back
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: next_back
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: next_back
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: next_back
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: next_back
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: nth
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: nth
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: nth
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: nth
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: nth_back
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: nth_back
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: nth_back
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: nth_back
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: partial_cmp
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: partial_cmp
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: partial_cmp
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: pop
+        path: tinyvec
+        desc: "Remove and return the last element of the vec, if there is …"
+        parent_idx: 4
+      - ty: Method
+        name: pop
+        path: tinyvec
+        desc: "Remove and return the last element of the vec, if there is …"
+        parent_idx: 5
+      - ty: Method
+        name: pop
+        path: tinyvec
+        desc: "Remove and return the last element of the vec, if there is …"
+        parent_idx: 1
+      - ty: Method
+        name: push
+        path: tinyvec
+        desc: Place an element onto the end of the vec.
+        parent_idx: 4
+      - ty: Method
+        name: push
+        path: tinyvec
+        desc: Place an element onto the end of the vec.
+        parent_idx: 5
+      - ty: Method
+        name: push
+        path: tinyvec
+        desc: Place an element onto the end of the vec.
+        parent_idx: 1
+      - ty: Method
+        name: remove
+        path: tinyvec
+        desc: "Removes the item at <code>index</code>, shifting all others down by one …"
+        parent_idx: 4
+      - ty: Method
+        name: remove
+        path: tinyvec
+        desc: "Removes the item at <code>index</code>, shifting all others down by one …"
+        parent_idx: 5
+      - ty: Method
+        name: remove
+        path: tinyvec
+        desc: "Removes the item at <code>index</code>, shifting all others down by one …"
+        parent_idx: 1
+      - ty: Method
+        name: reserve
+        path: tinyvec
+        desc: Reserves additional space. Moves to the heap if array can…
+        parent_idx: 1
+      - ty: Method
+        name: reserve_exact
+        path: tinyvec
+        desc: Reserves additional space. Moves to the heap if array can…
+        parent_idx: 1
+      - ty: Method
+        name: resize
+        path: tinyvec
+        desc: As <code>resize_with</code> and it clones the value as the closure.
+        parent_idx: 4
+      - ty: Method
+        name: resize
+        path: tinyvec
+        desc: As <code>resize_with</code> and it clones the value as the closure.
+        parent_idx: 5
+      - ty: Method
+        name: resize
+        path: tinyvec
+        desc: Resize the vec to the new length.
+        parent_idx: 1
+      - ty: Method
+        name: resize_with
+        path: tinyvec
+        desc: Resize the vec to the new length.
+        parent_idx: 4
+      - ty: Method
+        name: resize_with
+        path: tinyvec
+        desc: Resize the vec to the new length.
+        parent_idx: 5
+      - ty: Method
+        name: resize_with
+        path: tinyvec
+        desc: Resize the vec to the new length.
+        parent_idx: 1
+      - ty: Method
+        name: retain
+        path: tinyvec
+        desc: Walk the vec and keep only the elements that pass the …
+        parent_idx: 4
+      - ty: Method
+        name: retain
+        path: tinyvec
+        desc: Walk the vec and keep only the elements that pass the …
+        parent_idx: 5
+      - ty: Method
+        name: retain
+        path: tinyvec
+        desc: Walk the vec and keep only the elements that pass the …
+        parent_idx: 1
+      - ty: Method
+        name: serialize
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: serialize
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: set_len
+        path: tinyvec
+        desc: Forces the length of the vector to <code>new_len</code>.
+        parent_idx: 4
+      - ty: Method
+        name: set_len
+        path: tinyvec
+        desc: Forces the length of the vector to <code>new_len</code>.
+        parent_idx: 5
+      - ty: Method
+        name: shrink_to_fit
+        path: tinyvec
+        desc: Shrinks the capacity of the vector as much as possible. It …
+        parent_idx: 1
+      - ty: Method
+        name: size_hint
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: size_hint
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: size_hint
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: size_hint
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: size_hint
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: size_hint
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: splice
+        path: tinyvec
+        desc: Creates a splicing iterator that removes the specified …
+        parent_idx: 4
+      - ty: Method
+        name: splice
+        path: tinyvec
+        desc: Creates a splicing iterator that removes the specified …
+        parent_idx: 1
+      - ty: Method
+        name: split_off
+        path: tinyvec
+        desc: Splits the collection at the point given.
+        parent_idx: 4
+      - ty: Method
+        name: split_off
+        path: tinyvec
+        desc: Splits the collection at the point given.
+        parent_idx: 5
+      - ty: Method
+        name: split_off
+        path: tinyvec
+        desc: Splits the collection at the point given.
+        parent_idx: 1
+      - ty: Method
+        name: swap_remove
+        path: tinyvec
+        desc: "Remove an element, swapping the end of the vec into its …"
+        parent_idx: 4
+      - ty: Method
+        name: swap_remove
+        path: tinyvec
+        desc: "Remove an element, swapping the end of the vec into its …"
+        parent_idx: 5
+      - ty: Method
+        name: swap_remove
+        path: tinyvec
+        desc: "Remove an element, swapping the end of the vec into its …"
+        parent_idx: 1
+      - ty: Macro
+        name: tiny_vec
+        path: tinyvec
+        desc: Helper to make a <code>TinyVec</code>.
+        parent_idx: ~
+      - ty: Macro
+        name: tiny_vec
+        path: tinyvec
+        desc: Helper to make a <code>TinyVec</code>.
+        parent_idx: ~
+      - ty: Method
+        name: to_owned
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: to_owned
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: to_owned
+        path: tinyvec
+        desc: ""
+        parent_idx: 11
+      - ty: Method
+        name: to_string
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: to_string
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: to_string
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: truncate
+        path: tinyvec
+        desc: Reduces the vec’s length to the given value.
+        parent_idx: 4
+      - ty: Method
+        name: truncate
+        path: tinyvec
+        desc: Reduces the vec’s length to the given value.
+        parent_idx: 5
+      - ty: Method
+        name: truncate
+        path: tinyvec
+        desc: Reduces the vec’s length to the given value.
+        parent_idx: 1
+      - ty: Method
+        name: try_append
+        path: tinyvec
+        desc: Move all values from <code>other</code> into this vec. If appending …
+        parent_idx: 4
+      - ty: Method
+        name: try_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: try_from
+        path: tinyvec
+        desc: "The output has a length equal to that of the slice, with …"
+        parent_idx: 4
+      - ty: Method
+        name: try_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: try_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: try_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: try_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: try_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 9
+      - ty: Method
+        name: try_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: try_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: try_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: try_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: try_from
+        path: tinyvec
+        desc: ""
+        parent_idx: 11
+      - ty: Method
+        name: try_from_array_len
+        path: tinyvec
+        desc: "Wraps an array, using the given length as the starting …"
+        parent_idx: 4
+      - ty: Method
+        name: try_from_array_len
+        path: tinyvec
+        desc: "Wraps an array, using the given length as the starting …"
+        parent_idx: 1
+      - ty: Method
+        name: try_from_slice_len
+        path: tinyvec
+        desc: "Wraps a slice, using the given length as the starting …"
+        parent_idx: 5
+      - ty: Method
+        name: try_insert
+        path: tinyvec
+        desc: "Tries to insert an item at the position given, moving all …"
+        parent_idx: 4
+      - ty: Method
+        name: try_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: try_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: try_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: try_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: try_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: try_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 9
+      - ty: Method
+        name: try_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: try_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: try_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: try_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: try_into
+        path: tinyvec
+        desc: ""
+        parent_idx: 11
+      - ty: Method
+        name: try_push
+        path: tinyvec
+        desc: Tries to place an element onto the end of the vec. Returns …
+        parent_idx: 4
+      - ty: Method
+        name: type_id
+        path: tinyvec
+        desc: ""
+        parent_idx: 4
+      - ty: Method
+        name: type_id
+        path: tinyvec
+        desc: ""
+        parent_idx: 7
+      - ty: Method
+        name: type_id
+        path: tinyvec
+        desc: ""
+        parent_idx: 6
+      - ty: Method
+        name: type_id
+        path: tinyvec
+        desc: ""
+        parent_idx: 8
+      - ty: Method
+        name: type_id
+        path: tinyvec
+        desc: ""
+        parent_idx: 5
+      - ty: Method
+        name: type_id
+        path: tinyvec
+        desc: ""
+        parent_idx: 9
+      - ty: Method
+        name: type_id
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: type_id
+        path: tinyvec
+        desc: ""
+        parent_idx: 2
+      - ty: Method
+        name: type_id
+        path: tinyvec
+        desc: ""
+        parent_idx: 10
+      - ty: Method
+        name: type_id
+        path: tinyvec
+        desc: ""
+        parent_idx: 3
+      - ty: Method
+        name: type_id
+        path: tinyvec
+        desc: ""
+        parent_idx: 11
+      - ty: Method
+        name: with_capacity
+        path: tinyvec
+        desc: Makes a new TinyVec with <em>at least</em> the given capacity.
+        parent_idx: 1
+      - ty: Method
+        name: write
+        path: tinyvec
+        desc: ""
+        parent_idx: 1
+      - ty: StructField
+        name: "0"
+        path: "tinyvec::TinyVec"
+        desc: ""
+        parent_idx: 12
+      - ty: StructField
+        name: "0"
+        path: "tinyvec::TinyVec"
+        desc: ""
+        parent_idx: 13
+      - ty: StructField
+        name: "0"
+        path: "tinyvec::TinyVecDrain"
+        desc: ""
+        parent_idx: 14
+      - ty: StructField
+        name: "0"
+        path: "tinyvec::TinyVecDrain"
+        desc: ""
+        parent_idx: 15
+      - ty: StructField
+        name: "0"
+        path: "tinyvec::TinyVecIterator"
+        desc: ""
+        parent_idx: 16
+      - ty: StructField
+        name: "0"
+        path: "tinyvec::TinyVecIterator"
+        desc: ""
+        parent_idx: 17
+    paths:
+      - - Trait
+        - Array
+      - - Enum
+        - TinyVec
+      - - Enum
+        - TinyVecDrain
+      - - Enum
+        - TinyVecIterator
+      - - Struct
+        - ArrayVec
+      - - Struct
+        - SliceVec
+      - - Struct
+        - ArrayVecIterator
+      - - Struct
+        - ArrayVecSplice
+      - - Struct
+        - ArrayVecDrain
+      - - Struct
+        - SliceVecDrain
+      - - Struct
+        - TinyVecSplice
+      - - Struct
+        - TryFromSliceError
+      - - Variant
+        - Inline
+      - - Variant
+        - Heap
+      - - Variant
+        - Inline
+      - - Variant
+        - Heap
+      - - Variant
+        - Inline
+      - - Variant
+        - Heap
+
