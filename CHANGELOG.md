@@ -11,7 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Update to Rust edition 2021 (bumping MSRV to `1.56`).
+- Update to Rust edition 2021.
+- Bump minimum Rust version to `1.58`.
+
+### Fixed
+
+- Correct URL retrieval as the docs.rs redirect logic changed.
+- Adjust to the new data tags on docs.rs to retrieve the search index file.
 
 ## [0.2.0] - 2021-07-30
 
