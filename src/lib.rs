@@ -33,8 +33,10 @@ use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
 
-pub use crate::simple_path::{ParseError, SimplePath};
-pub use crate::version::Version;
+pub use crate::{
+    simple_path::{ParseError, SimplePath},
+    version::Version,
+};
 
 mod crates;
 mod index;

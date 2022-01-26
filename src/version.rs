@@ -1,4 +1,7 @@
-use std::{str::FromStr, fmt::{Display, self}};
+use std::{
+    fmt::{self, Display},
+    str::FromStr,
+};
 
 use serde::{Deserialize, Serialize};
 
@@ -23,7 +26,7 @@ impl FromStr for Version {
     }
 }
 
-impl Display for Version{
+impl Display for Version {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Latest => f.write_str("latest"),
