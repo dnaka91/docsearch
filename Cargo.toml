@@ -16,14 +16,14 @@ include = ["src/**/*", "LICENSE", "README.md", "!**/fixtures/**/*", "!**/snapsho
 [dependencies]
 log = "0.4.14"
 reqwest = { version = "0.11.9", default-features = false, features = ["gzip", "rustls-tls"] }
-semver = { version = "1.0.4", features = ["serde"] }
+semver = { version = "1.0.6", features = ["serde"] }
 serde = { version = "1.0.136", features = ["derive"] }
-serde_json = "1.0.78"
+serde_json = "1.0.79"
 serde_repr = "0.1.7"
 thiserror = "1.0.30"
 unicode-xid = "0.2.2"
 
 [dev-dependencies]
 env_logger = "0.9.0"
-insta = { version = "1.11.0", features = ["glob"] }
-tokio = { version = "1.15.0", features = ["macros", "rt"] }
+insta = { version = "1.13.0", features = ["glob"] }
+tokio = { version = "1.17.0", features = ["macros", "rt"] }
