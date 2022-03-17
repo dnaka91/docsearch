@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use chumsky::{error::Cheap, prelude::*};
 
 use super::{v2::RawCrate, RawIndexData};
-use crate::IndexV1Error as Error;
+use crate::error::IndexV1Error as Error;
 
 pub(super) fn load_raw(index: &str) -> Result<RawIndexData, Error> {
     let r = {

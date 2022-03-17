@@ -4,7 +4,7 @@ use serde::Deserialize;
 use serde_tuple::Deserialize_tuple;
 
 use super::{ItemType, RawCrateData, RawIndexData};
-use crate::{Error, Result};
+use crate::error::{Error, Result};
 
 #[derive(Deserialize)]
 struct RawIndex {

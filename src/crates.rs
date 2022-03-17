@@ -4,7 +4,10 @@ use std::borrow::Cow;
 
 use tracing::debug;
 
-use crate::{Error, Result, Version};
+use crate::{
+    error::{Error, Result},
+    Version,
+};
 
 /// Base URL for the `docs.rs` docs service.
 const DOCSRS_URL: &str = "https://docs.rs";

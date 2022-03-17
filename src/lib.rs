@@ -19,7 +19,6 @@
 //! parsing of older crates that haven't be update in a while is required.
 //! - `index-v1` enables support for the even older index format. Nowadays it's rarely found and
 //! this is only needed to parse very old crates that haven't been updated in a long while.
-
 #![forbid(unsafe_code)]
 #![deny(
     rust_2018_idioms,
@@ -34,59 +33,17 @@ use std::{borrow::Cow, collections::BTreeMap};
 
 use serde::{Deserialize, Serialize};
 
-pub use crate::{
-    simple_path::{ParseError, SimplePath},
-    version::Version,
-};
+use crate::error::{Error, Result};
+pub use crate::{simple_path::SimplePath, version::Version};
 
 mod crates;
+pub mod error;
 mod index;
 mod simple_path;
 mod version;
 
 /// List of crates in the stdlib index.
 pub(crate) const STD_CRATES: &[&str] = &["alloc", "core", "proc_macro", "std", "test"];
-
-/// Custom result type of docsearch for convenience.
-pub type Result<T, E = Error> = std::result::Result<T, E>;
-
-/// Errors that can happen when retrieving and parsing a crate index.
-#[derive(Debug, thiserror::Error)]
-#[non_exhaustive]
-pub enum Error {
-    #[error("failed deserializing JSON")]
-    Json(#[from] serde_json::Error),
-    #[error("invalid semantic version string")]
-    SemVer(#[from] semver::Error),
-    #[error("the version part was missing in `{0}`")]
-    MissingVersion(String),
-    #[error("couldn't find the index path in a response body")]
-    IndexNotFound,
-    #[error("index didn't contain information for the requested crate")]
-    CrateDataMissing,
-    #[error("version was not in the expected `search-index<X.X.X>.js` format but `{0}`")]
-    InvalidVersionFormat(String),
-    #[error("the used index version is currently not supported")]
-    UnsupportedIndexVersion,
-    #[cfg(feature = "index-v1")]
-    #[error("failed to parse the V1 index")]
-    InvalidV1Index(#[from] IndexV1Error),
-}
-
-/// Errors that can happen when parsing the old V1 index.
-#[cfg(feature = "index-v1")]
-#[derive(Debug, thiserror::Error)]
-#[non_exhaustive]
-pub enum IndexV1Error {
-    #[error("missing reference variable in index")]
-    MissingReference,
-    #[error("failed deserializing reference content")]
-    InvalidReferenceJson(#[source] serde_json::Error),
-    #[error("failed parsing the JavaScript parts of the index")]
-    InvalidIndexJavaScript(String),
-    #[error("failed deserializing transformed index")]
-    InvalidIndexJson(#[source] serde_json::Error),
-}
 
 /// Parsed crate index that contains the mappings from [`SimplePath`]s to their URL for direct
 /// linking.

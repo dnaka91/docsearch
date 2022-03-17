@@ -6,7 +6,7 @@ use std::collections::{BTreeMap, HashMap};
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;
 
-use crate::{Error, Result};
+use crate::error::{Error, Result};
 
 #[cfg(feature = "index-v1")]
 mod v1;

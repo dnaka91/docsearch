@@ -8,18 +8,7 @@ use std::{
 
 use unicode_xid::UnicodeXID;
 
-use crate::STD_CRATES;
-
-/// Errors that can happen when parsing a [`SimplePath`].
-#[derive(Debug, thiserror::Error)]
-pub enum ParseError {
-    /// The value is too short to represent a simple path.
-    #[error("The value is too short")]
-    TooShort,
-    /// One (and possibly more) of the segments aren't valid identifiers.
-    #[error("One or more segments aren't valid identifiers")]
-    InvalidIdentifier,
-}
+use crate::{error::ParseError, STD_CRATES};
 
 /// Path for any item within a crate (or just the crate itself) like `std::vec::Vec`,
 /// `anyhow::Result` or `thiserror`.
@@ -41,7 +30,7 @@ impl SimplePath {
 
     /// Crate name part of this path.
     ///
-    /// This can be used as argument for the [`search`](crate::search) function.
+    /// This can be used as argument for the [`start_search`](crate::start_search) function.
     #[must_use]
     pub fn crate_name(&self) -> &str {
         &self.0[..self.1]
