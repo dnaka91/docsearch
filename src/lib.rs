@@ -1,23 +1,38 @@
-//! # docsearch
-//!
 //! Use the latest search index from `rustdoc` to find the docs.rs (or stdlib) URL for any item in a
 //! crate by its [simple path](https://doc.rust-lang.org/stable/reference/paths.html#simple-paths).
 //!
-//! ## Example
+//! # Example
+//!
+//! In this example we search for the `anyhow::Result` item and print the web link to the
+//! corresponding `docs.rs` page.
 //!
 //! ```no_run
 //! use docsearch::{Result, SimplePath, Version};
 //!
-//! # #[tokio::main(flavor = "current_thread")]
-//! # async fn main() -> Result<()> {
-//! let path = "anyhow::Result".parse::<SimplePath>().unwrap();
-//! let index = docsearch::search(path.crate_name(), Version::Latest).await?;
-//! let link = index.find_link(&path).unwrap();
+//! #[tokio::main(flavor = "current_thread")]
+//! async fn main() -> Result<()> {
+//!     let path = "anyhow::Result".parse::<SimplePath>().unwrap();
+//!     let index = docsearch::search(path.crate_name(), Version::Latest).await?;
+//!     let link = index.find_link(&path).unwrap();
 //!
-//! println!("{}", link);
-//! # Ok(())
-//! # }
+//!     println!("{}", link);
+//!
+//!     Ok(())
+//! }
 //! ```
+//!
+//! # Feature flags
+//!
+//! The following features flags enable support for older versions of the search index. If they're
+//! not enabled, the retrieving the [`Index`] for a crate might fail. These should be enabled or
+//! disabled based on the requirements to what crates will be searched for (if known).
+//!
+//! The features listed are **enabled by default**.
+//!
+//! - `index-v2` enables support to parse the slightly outdated index format. This is needed if
+//! parsing of older crates that haven't be update in a while is required.
+//! - `index-v1` enables support for the even older index format. Nowadays it's rarely found and
+//! this is only needed to parse very old crates that haven't been updated in a long while.
 
 #![forbid(unsafe_code)]
 #![deny(
@@ -74,6 +89,7 @@ pub enum Error {
     InvalidV1Index(#[from] IndexV1Error),
 }
 
+/// Errors that can happen when parsing the old V1 index.
 #[cfg(feature = "index-v1")]
 #[derive(Debug, thiserror::Error)]
 #[non_exhaustive]
