@@ -13,13 +13,20 @@ categories = ["parser-implementations"]
 keywords = ["mapping", "rustdoc", "search-index"]
 include = ["src/**/*", "LICENSE", "README.md", "!**/fixtures/**/*", "!**/snapshots/**/*"]
 
+[features]
+default = ["index-v1", "index-v2"]
+index-v1 = ["index-v2", "chumsky", "serde_tuple"]
+index-v2 = ["serde_tuple"]
+
 [dependencies]
+chumsky = { version = "0.8.0", optional = true }
 log = "0.4.14"
-reqwest = { version = "0.11.9", default-features = false, features = ["gzip", "rustls-tls"] }
+reqwest = { version = "0.11.10", default-features = false, features = ["gzip", "rustls-tls"] }
 semver = { version = "1.0.6", features = ["serde"] }
 serde = { version = "1.0.136", features = ["derive"] }
 serde_json = "1.0.79"
 serde_repr = "0.1.7"
+serde_tuple = { version = "0.5.0", optional = true }
 thiserror = "1.0.30"
 unicode-xid = "0.2.2"
 

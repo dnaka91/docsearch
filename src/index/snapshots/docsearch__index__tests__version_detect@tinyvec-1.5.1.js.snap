@@ -1,0 +1,7 @@
+---
+source: src/index/mod.rs
+expression: data
+input_file: src/index/fixtures/tinyvec-1.5.1.js
+---
+V3
+

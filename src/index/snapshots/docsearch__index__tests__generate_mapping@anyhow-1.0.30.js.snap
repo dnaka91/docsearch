@@ -1,0 +1,56 @@
+---
+source: src/index/mod.rs
+expression: data
+input_file: src/index/fixtures/anyhow-1.0.30.js
+---
+anyhow:
+  "anyhow::Chain": anyhow/struct.Chain.html
+  "anyhow::Chain::as_ref": "anyhow/struct.Chain.html#method.as_ref"
+  "anyhow::Chain::backtrace": "anyhow/struct.Chain.html#method.backtrace"
+  "anyhow::Chain::borrow": "anyhow/struct.Chain.html#method.borrow"
+  "anyhow::Chain::borrow_mut": "anyhow/struct.Chain.html#method.borrow_mut"
+  "anyhow::Chain::chain": "anyhow/struct.Chain.html#method.chain"
+  "anyhow::Chain::context": "anyhow/struct.Chain.html#method.context"
+  "anyhow::Chain::deref": "anyhow/struct.Chain.html#method.deref"
+  "anyhow::Chain::deref_mut": "anyhow/struct.Chain.html#method.deref_mut"
+  "anyhow::Chain::downcast": "anyhow/struct.Chain.html#method.downcast"
+  "anyhow::Chain::downcast_mut": "anyhow/struct.Chain.html#method.downcast_mut"
+  "anyhow::Chain::downcast_ref": "anyhow/struct.Chain.html#method.downcast_ref"
+  "anyhow::Chain::drop": "anyhow/struct.Chain.html#method.drop"
+  "anyhow::Chain::fmt": "anyhow/struct.Chain.html#method.fmt"
+  "anyhow::Chain::from": "anyhow/struct.Chain.html#method.from"
+  "anyhow::Chain::into": "anyhow/struct.Chain.html#method.into"
+  "anyhow::Chain::is": "anyhow/struct.Chain.html#method.is"
+  "anyhow::Chain::msg": "anyhow/struct.Chain.html#method.msg"
+  "anyhow::Chain::new": "anyhow/struct.Chain.html#method.new"
+  "anyhow::Chain::root_cause": "anyhow/struct.Chain.html#method.root_cause"
+  "anyhow::Chain::to_string": "anyhow/struct.Chain.html#method.to_string"
+  "anyhow::Chain::try_from": "anyhow/struct.Chain.html#method.try_from"
+  "anyhow::Chain::try_into": "anyhow/struct.Chain.html#method.try_into"
+  "anyhow::Chain::type_id": "anyhow/struct.Chain.html#method.type_id"
+  "anyhow::Context": anyhow/trait.Context.html
+  "anyhow::Error": anyhow/struct.Error.html
+  "anyhow::Error::context": "anyhow/struct.Error.html#tymethod.context"
+  "anyhow::Error::with_context": "anyhow/struct.Error.html#tymethod.with_context"
+  "anyhow::Result": anyhow/type.Result.html
+  "anyhow::anyhow": anyhow/macro.anyhow.html
+  "anyhow::bail": anyhow/macro.bail.html
+  "anyhow::borrow": anyhow/method.borrow.html
+  "anyhow::borrow_mut": anyhow/method.borrow_mut.html
+  "anyhow::clone": anyhow/method.clone.html
+  "anyhow::clone_into": anyhow/method.clone_into.html
+  "anyhow::default": anyhow/method.default.html
+  "anyhow::ensure": anyhow/macro.ensure.html
+  "anyhow::from": anyhow/method.from.html
+  "anyhow::into": anyhow/method.into.html
+  "anyhow::into_iter": anyhow/method.into_iter.html
+  "anyhow::len": anyhow/method.len.html
+  "anyhow::new": anyhow/method.new.html
+  "anyhow::next": anyhow/method.next.html
+  "anyhow::next_back": anyhow/method.next_back.html
+  "anyhow::size_hint": anyhow/method.size_hint.html
+  "anyhow::to_owned": anyhow/method.to_owned.html
+  "anyhow::try_from": anyhow/method.try_from.html
+  "anyhow::try_into": anyhow/method.try_into.html
+  "anyhow::type_id": anyhow/method.type_id.html
+

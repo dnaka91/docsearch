@@ -1,0 +1,7 @@
+---
+source: src/index/mod.rs
+expression: data
+input_file: src/index/fixtures/anyhow-1.0.30.js
+---
+V2
+

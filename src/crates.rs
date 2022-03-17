@@ -96,17 +96,23 @@ pub async fn get_std() -> Result<(Version, String)> {
 /// a simple string extraction is sufficient and we don't have to pull in big dependencies to parse
 /// the HTML content first.
 fn find_url(body: &str) -> Option<String> {
-    let old = body
+    let v1 = body
+        .rfind("src=\"../search-index-")
+        .and_then(|pos| body[pos..].split_once("src=\"../"))
+        .and_then(|(_, start)| start.split_once('\"'))
+        .map(|(url, _)| url.to_owned());
+
+    let v2 = body
         .rsplit_once("data-search-index-js=\"../")
         .and_then(|(_, start)| start.split_once('\"'))
         .map(|(url, _)| url.to_owned());
 
-    let new = body
+    let v3 = body
         .rsplit_once("data-resource-suffix=\"")
         .and_then(|(_, start)| start.split_once('\"'))
         .map(|(suffix, _)| format!("search-index{suffix}.js"));
 
-    new.or(old)
+    v3.or(v2).or(v1)
 }
 
 #[cfg(test)]

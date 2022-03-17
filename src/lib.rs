@@ -51,6 +51,7 @@ pub type Result<T, E = Error> = std::result::Result<T, E>;
 
 /// Errors that can happen when retrieving and parsing a crate index.
 #[derive(Debug, thiserror::Error)]
+#[non_exhaustive]
 pub enum Error {
     #[error("failed deserializing JSON")]
     Json(#[from] serde_json::Error),
@@ -66,6 +67,25 @@ pub enum Error {
     CrateDataMissing,
     #[error("version was not in the expected `search-index<X.X.X>.js` format but `{0}`")]
     InvalidVersionFormat(String),
+    #[error("the used index version is currently not supported")]
+    UnsupportedIndexVersion,
+    #[cfg(feature = "index-v1")]
+    #[error("failed to parse the V1 index")]
+    InvalidV1Index(#[from] IndexV1Error),
+}
+
+#[cfg(feature = "index-v1")]
+#[derive(Debug, thiserror::Error)]
+#[non_exhaustive]
+pub enum IndexV1Error {
+    #[error("missing reference variable in index")]
+    MissingReference,
+    #[error("failed deserializing reference content")]
+    InvalidReferenceJson(#[source] serde_json::Error),
+    #[error("failed parsing the JavaScript parts of the index")]
+    InvalidIndexJavaScript(String),
+    #[error("failed deserializing transformed index")]
+    InvalidIndexJson(#[source] serde_json::Error),
 }
 
 /// Parsed crate index that contains the mappings from [`SimplePath`]s to their URL for direct

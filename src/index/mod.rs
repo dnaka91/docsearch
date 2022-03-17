@@ -6,7 +6,41 @@ use std::collections::{BTreeMap, HashMap};
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;
 
-use crate::Result;
+use crate::{Error, Result};
+
+#[cfg(feature = "index-v1")]
+mod v1;
+#[cfg(feature = "index-v2")]
+mod v2;
+
+#[cfg_attr(test, derive(Clone, Copy, Eq, PartialEq, serde::Serialize))]
+enum Version {
+    #[cfg(feature = "index-v1")]
+    V1,
+    #[cfg(feature = "index-v2")]
+    V2,
+    V3,
+}
+
+impl Version {
+    fn detect(index: &str) -> Option<Self> {
+        #[cfg(feature = "index-v1")]
+        if index.starts_with(r#"var N=null,E="",T="t",U="u",searchIndex={};"#) {
+            return Some(Self::V1);
+        }
+
+        #[cfg(feature = "index-v2")]
+        if index.ends_with(r#"addSearchOptions(searchIndex);initSearch(searchIndex);"#) {
+            return Some(Self::V2);
+        }
+
+        if index.ends_with(r#"if (window.initSearch) {window.initSearch(searchIndex)};"#) {
+            Some(Self::V3)
+        } else {
+            None
+        }
+    }
+}
 
 /// Whole index data after transformation.
 #[cfg_attr(test, derive(PartialEq, Eq, serde::Serialize))]
@@ -169,7 +203,16 @@ struct RawCrateData {
 /// This is the combination of the internal functions [`load_raw`], [`transform`] and
 /// [`generate_mapping`].
 pub fn load(index: &str) -> Result<HashMap<String, BTreeMap<String, String>>> {
-    Ok(generate_mapping(transform(load_raw(index)?)))
+    let raw = match Version::detect(index) {
+        Some(Version::V3) => load_raw(index)?,
+        #[cfg(feature = "index-v2")]
+        Some(Version::V2) => v2::load_raw(index)?,
+        #[cfg(feature = "index-v1")]
+        Some(Version::V1) => v1::load_raw(index)?,
+        None => return Err(Error::UnsupportedIndexVersion),
+    };
+
+    Ok(generate_mapping(transform(raw)))
 }
 
 /// Extract the JSON content from the index data and run it through [`serde`] to transform it into
@@ -353,28 +396,63 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_load_raw() {
+    fn test_version_detect() {
         glob!("fixtures/*.js", |path| {
             let input = fs::read_to_string(path).unwrap();
-            let data = load_raw(&input).unwrap();
+            let data = Version::detect(&input);
             insta::assert_yaml_snapshot!(data);
         });
     }
 
+    #[allow(clippy::bind_instead_of_map)]
+    #[test]
+    fn test_load_raw() {
+        glob!("fixtures/*.js", |path| {
+            let input = fs::read_to_string(path).unwrap();
+            let data = Version::detect(&input).and_then(|v| match v {
+                #[cfg(feature = "index-v1")]
+                Version::V1 => Some(v1::load_raw(&input).unwrap()),
+                #[cfg(feature = "index-v2")]
+                Version::V2 => Some(v2::load_raw(&input).unwrap()),
+                Version::V3 => Some(load_raw(&input).unwrap()),
+            });
+            insta::assert_yaml_snapshot!(data);
+        });
+    }
+
+    #[allow(clippy::bind_instead_of_map)]
     #[test]
     fn test_transform() {
         glob!("fixtures/*.js", |path| {
             let input = fs::read_to_string(path).unwrap();
-            let data = transform(load_raw(&input).unwrap());
+            let data = Version::detect(&input)
+                .and_then(|v| match v {
+                    #[cfg(feature = "index-v1")]
+                    Version::V1 => Some(v1::load_raw(&input).unwrap()),
+                    #[cfg(feature = "index-v2")]
+                    Version::V2 => Some(v2::load_raw(&input).unwrap()),
+                    Version::V3 => Some(load_raw(&input).unwrap()),
+                })
+                .map(transform);
             insta::assert_yaml_snapshot!(data);
         });
     }
 
+    #[allow(clippy::bind_instead_of_map)]
     #[test]
     fn test_generate_mapping() {
         glob!("fixtures/*.js", |path| {
             let input = fs::read_to_string(path).unwrap();
-            let data = generate_mapping(transform(load_raw(&input).unwrap()));
+            let data = Version::detect(&input)
+                .and_then(|v| match v {
+                    #[cfg(feature = "index-v1")]
+                    Version::V1 => Some(v1::load_raw(&input).unwrap()),
+                    #[cfg(feature = "index-v2")]
+                    Version::V2 => Some(v2::load_raw(&input).unwrap()),
+                    Version::V3 => Some(load_raw(&input).unwrap()),
+                })
+                .map(transform)
+                .map(generate_mapping);
             insta::assert_yaml_snapshot!(data);
         });
     }

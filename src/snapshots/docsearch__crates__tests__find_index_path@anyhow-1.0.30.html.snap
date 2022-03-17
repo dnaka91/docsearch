@@ -1,0 +1,7 @@
+---
+source: src/crates.rs
+expression: data
+input_file: src/fixtures/anyhow-1.0.30.html
+---
+search-index-20200512-1.45.0-nightly-769d12eec.js
+

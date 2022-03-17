@@ -1,0 +1,217 @@
+---
+source: src/index/mod.rs
+expression: data
+input_file: src/index/fixtures/anyhow-1.0.0.js
+---
+crates:
+  anyhow:
+    doc: "This library provides [`anyhow::Error`][Error], a trait…"
+    items:
+      - ty: Struct
+        name: Chain
+        path: anyhow
+        desc: Iterator of a chain of source errors.
+        parent_idx: ~
+      - ty: Struct
+        name: Error
+        path: anyhow
+        desc: "The `Error` type, a wrapper around a dynamic error type."
+        parent_idx: ~
+      - ty: Method
+        name: new
+        path: anyhow
+        desc: Create a new error object from any error type.
+        parent_idx: ~
+      - ty: Method
+        name: context
+        path: anyhow
+        desc: Wrap the error value with additional context.
+        parent_idx: ~
+      - ty: Method
+        name: backtrace
+        path: anyhow
+        desc: Get the backtrace for this Error.
+        parent_idx: ~
+      - ty: Method
+        name: chain
+        path: anyhow
+        desc: An iterator of the chain of source errors contained by…
+        parent_idx: ~
+      - ty: Method
+        name: root_cause
+        path: anyhow
+        desc: "The lowest level cause of this error — this error's…"
+        parent_idx: ~
+      - ty: Method
+        name: is
+        path: anyhow
+        desc: "Returns `true` if `E` is the type wrapped by this error…"
+        parent_idx: ~
+      - ty: Method
+        name: downcast
+        path: anyhow
+        desc: Attempt to downcast the error object to a concrete type.
+        parent_idx: ~
+      - ty: Method
+        name: downcast_ref
+        path: anyhow
+        desc: Downcast this error object by reference.
+        parent_idx: ~
+      - ty: Method
+        name: downcast_mut
+        path: anyhow
+        desc: Downcast this error object by mutable reference.
+        parent_idx: ~
+      - ty: Typedef
+        name: Result
+        path: anyhow
+        desc: "`Result<T, Error>`"
+        parent_idx: ~
+      - ty: Trait
+        name: Context
+        path: anyhow
+        desc: "Provides the `context` method for `Result`."
+        parent_idx: ~
+      - ty: TyMethod
+        name: context
+        path: anyhow
+        desc: Wrap the error value with additional context.
+        parent_idx: 0
+      - ty: TyMethod
+        name: with_context
+        path: anyhow
+        desc: Wrap the error value with additional context that is…
+        parent_idx: 0
+      - ty: Macro
+        name: bail
+        path: anyhow
+        desc: Return early with an error.
+        parent_idx: ~
+      - ty: Macro
+        name: anyhow
+        path: anyhow
+        desc: Construct an ad-hoc error from a string.
+        parent_idx: ~
+      - ty: Method
+        name: into
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: into_iter
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: from
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: try_from
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: try_into
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: borrow_mut
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: borrow
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: type_id
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: into
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: from
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: to_string
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: try_from
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: try_into
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: borrow_mut
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: borrow
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: type_id
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: drop
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: from
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: next
+        path: anyhow
+        desc: ""
+        parent_idx: 1
+      - ty: Method
+        name: deref_mut
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: deref
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: fmt
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+      - ty: Method
+        name: fmt
+        path: anyhow
+        desc: ""
+        parent_idx: ~
+    paths:
+      - - Struct
+        - Error
+      - - Trait
+        - Context
+      - - Struct
+        - Chain
+

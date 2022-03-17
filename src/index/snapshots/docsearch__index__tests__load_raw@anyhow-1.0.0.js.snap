@@ -1,0 +1,220 @@
+---
+source: src/index/mod.rs
+expression: data
+input_file: src/index/fixtures/anyhow-1.0.0.js
+---
+anyhow:
+  doc: "This library provides [`anyhow::Error`][Error], a trait…"
+  t:
+    - Struct
+    - Struct
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Typedef
+    - Trait
+    - TyMethod
+    - TyMethod
+    - Macro
+    - Macro
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+  n:
+    - Chain
+    - Error
+    - new
+    - context
+    - backtrace
+    - chain
+    - root_cause
+    - is
+    - downcast
+    - downcast_ref
+    - downcast_mut
+    - Result
+    - Context
+    - context
+    - with_context
+    - bail
+    - anyhow
+    - into
+    - into_iter
+    - from
+    - try_from
+    - try_into
+    - borrow_mut
+    - borrow
+    - type_id
+    - into
+    - from
+    - to_string
+    - try_from
+    - try_into
+    - borrow_mut
+    - borrow
+    - type_id
+    - drop
+    - from
+    - next
+    - deref_mut
+    - deref
+    - fmt
+    - fmt
+  q:
+    - anyhow
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+  d:
+    - Iterator of a chain of source errors.
+    - "The `Error` type, a wrapper around a dynamic error type."
+    - Create a new error object from any error type.
+    - Wrap the error value with additional context.
+    - Get the backtrace for this Error.
+    - An iterator of the chain of source errors contained by…
+    - "The lowest level cause of this error — this error's…"
+    - "Returns `true` if `E` is the type wrapped by this error…"
+    - Attempt to downcast the error object to a concrete type.
+    - Downcast this error object by reference.
+    - Downcast this error object by mutable reference.
+    - "`Result<T, Error>`"
+    - "Provides the `context` method for `Result`."
+    - Wrap the error value with additional context.
+    - Wrap the error value with additional context that is…
+    - Return early with an error.
+    - Construct an ad-hoc error from a string.
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+  i:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 1
+    - 1
+    - 0
+    - 0
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 2
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 2
+    - 0
+    - 0
+    - 0
+    - 0
+  p:
+    - - Struct
+      - Error
+    - - Trait
+      - Context
+    - - Struct
+      - Chain
+

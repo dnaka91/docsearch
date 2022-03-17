@@ -1,8 +1,7 @@
 ---
-source: src/index.rs
+source: src/index/mod.rs
 expression: data
-input_file: src/fixtures/thiserror-1.0.26.js
-
+input_file: src/index/fixtures/thiserror-1.0.26.js
 ---
 thiserror:
   doc: github crates-io docs-rs

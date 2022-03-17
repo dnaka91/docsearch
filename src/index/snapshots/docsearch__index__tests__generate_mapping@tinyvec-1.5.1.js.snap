@@ -1,9 +1,7 @@
 ---
-source: src/index.rs
-assertion_line: 378
+source: src/index/mod.rs
 expression: data
-input_file: src/fixtures/tinyvec-1.5.1.js
-
+input_file: src/index/fixtures/tinyvec-1.5.1.js
 ---
 tinyvec:
   "tinyvec::Array": tinyvec/trait.Array.html

@@ -1,9 +1,7 @@
 ---
-source: src/index.rs
-assertion_line: 378
+source: src/index/mod.rs
 expression: data
-input_file: src/fixtures/anyhow-1.0.53.js
-
+input_file: src/index/fixtures/anyhow-1.0.53.js
 ---
 anyhow:
   "anyhow::Chain": anyhow/struct.Chain.html

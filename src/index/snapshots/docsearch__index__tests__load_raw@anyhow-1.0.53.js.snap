@@ -1,0 +1,290 @@
+---
+source: src/index/mod.rs
+expression: data
+input_file: src/index/fixtures/anyhow-1.0.53.js
+---
+anyhow:
+  doc: github crates-io docs-rs
+  t:
+    - Struct
+    - Trait
+    - Struct
+    - Function
+    - Typedef
+    - Macro
+    - Method
+    - Method
+    - Method
+    - Macro
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - TyMethod
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Macro
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - Method
+    - TyMethod
+  n:
+    - Chain
+    - Context
+    - Error
+    - Ok
+    - Result
+    - anyhow
+    - as_ref
+    - as_ref
+    - backtrace
+    - bail
+    - borrow
+    - borrow
+    - borrow_mut
+    - borrow_mut
+    - chain
+    - clone
+    - clone_into
+    - context
+    - context
+    - default
+    - deref
+    - deref_mut
+    - downcast
+    - downcast_mut
+    - downcast_ref
+    - drop
+    - ensure
+    - fmt
+    - fmt
+    - from
+    - from
+    - from
+    - from
+    - into
+    - into
+    - into_iter
+    - is
+    - len
+    - msg
+    - new
+    - new
+    - next
+    - next_back
+    - root_cause
+    - size_hint
+    - to_owned
+    - to_string
+    - try_from
+    - try_from
+    - try_into
+    - try_into
+    - type_id
+    - type_id
+    - with_context
+  q:
+    - anyhow
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+  d:
+    - Iterator of a chain of source errors.
+    - Provides the <code>context</code> method for <code>Result</code>.
+    - "The <code>Error</code> type, a wrapper around a dynamic error type."
+    - "Equivalent to Ok::&lt;_, anyhow::Error&gt;(value)."
+    - "<code>Result&lt;T, Error&gt;</code>"
+    - Construct an ad-hoc error from a string or existing non-…
+    - ""
+    - ""
+    - Get the backtrace for this Error.
+    - Return early with an error.
+    - ""
+    - ""
+    - ""
+    - ""
+    - An iterator of the chain of source errors contained by …
+    - ""
+    - ""
+    - Wrap the error value with additional context.
+    - Wrap the error value with additional context.
+    - ""
+    - ""
+    - ""
+    - Attempt to downcast the error object to a concrete type.
+    - Downcast this error object by mutable reference.
+    - Downcast this error object by reference.
+    - ""
+    - Return early with an error if a condition is not satisfied.
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - Returns true if <code>E</code> is the type held by this error object.
+    - ""
+    - Create a new error object from a printable error message.
+    - Create a new error object from any error type.
+    - ""
+    - ""
+    - ""
+    - The lowest level cause of this error — this error’s …
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - ""
+    - Wrap the error value with additional context that is …
+  i:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 1
+    - 1
+    - 1
+    - 0
+    - 1
+    - 2
+    - 1
+    - 2
+    - 1
+    - 2
+    - 2
+    - 3
+    - 1
+    - 2
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 0
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 2
+    - 1
+    - 2
+    - 2
+    - 1
+    - 2
+    - 1
+    - 1
+    - 2
+    - 2
+    - 2
+    - 1
+    - 2
+    - 2
+    - 1
+    - 1
+    - 2
+    - 1
+    - 2
+    - 1
+    - 2
+    - 3
+  p:
+    - - Struct
+      - Error
+    - - Struct
+      - Chain
+    - - Trait
+      - Context
+

@@ -1,0 +1,45 @@
+---
+source: src/index/mod.rs
+expression: data
+input_file: src/index/fixtures/anyhow-1.0.0.js
+---
+anyhow:
+  "anyhow::Chain": anyhow/struct.Chain.html
+  "anyhow::Context": anyhow/trait.Context.html
+  "anyhow::Context::borrow": "anyhow/trait.Context.html#method.borrow"
+  "anyhow::Context::borrow_mut": "anyhow/trait.Context.html#method.borrow_mut"
+  "anyhow::Context::from": "anyhow/trait.Context.html#method.from"
+  "anyhow::Context::into": "anyhow/trait.Context.html#method.into"
+  "anyhow::Context::into_iter": "anyhow/trait.Context.html#method.into_iter"
+  "anyhow::Context::next": "anyhow/trait.Context.html#method.next"
+  "anyhow::Context::try_from": "anyhow/trait.Context.html#method.try_from"
+  "anyhow::Context::try_into": "anyhow/trait.Context.html#method.try_into"
+  "anyhow::Context::type_id": "anyhow/trait.Context.html#method.type_id"
+  "anyhow::Error": anyhow/struct.Error.html
+  "anyhow::Error::context": "anyhow/struct.Error.html#tymethod.context"
+  "anyhow::Error::with_context": "anyhow/struct.Error.html#tymethod.with_context"
+  "anyhow::Result": anyhow/type.Result.html
+  "anyhow::anyhow": anyhow/macro.anyhow.html
+  "anyhow::backtrace": anyhow/method.backtrace.html
+  "anyhow::bail": anyhow/macro.bail.html
+  "anyhow::borrow": anyhow/method.borrow.html
+  "anyhow::borrow_mut": anyhow/method.borrow_mut.html
+  "anyhow::chain": anyhow/method.chain.html
+  "anyhow::context": anyhow/method.context.html
+  "anyhow::deref": anyhow/method.deref.html
+  "anyhow::deref_mut": anyhow/method.deref_mut.html
+  "anyhow::downcast": anyhow/method.downcast.html
+  "anyhow::downcast_mut": anyhow/method.downcast_mut.html
+  "anyhow::downcast_ref": anyhow/method.downcast_ref.html
+  "anyhow::drop": anyhow/method.drop.html
+  "anyhow::fmt": anyhow/method.fmt.html
+  "anyhow::from": anyhow/method.from.html
+  "anyhow::into": anyhow/method.into.html
+  "anyhow::is": anyhow/method.is.html
+  "anyhow::new": anyhow/method.new.html
+  "anyhow::root_cause": anyhow/method.root_cause.html
+  "anyhow::to_string": anyhow/method.to_string.html
+  "anyhow::try_from": anyhow/method.try_from.html
+  "anyhow::try_into": anyhow/method.try_into.html
+  "anyhow::type_id": anyhow/method.type_id.html
+
