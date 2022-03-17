@@ -3,23 +3,9 @@
 //!
 //! # Example
 //!
-//! In this example we search for the `anyhow::Result` item and print the web link to the
-//! corresponding `docs.rs` page.
-//!
-//! ```no_run
-//! use docsearch::{Result, SimplePath, Version};
-//!
-//! #[tokio::main(flavor = "current_thread")]
-//! async fn main() -> Result<()> {
-//!     let path = "anyhow::Result".parse::<SimplePath>().unwrap();
-//!     let index = docsearch::search(path.crate_name(), Version::Latest).await?;
-//!     let link = index.find_link(&path).unwrap();
-//!
-//!     println!("{}", link);
-//!
-//!     Ok(())
-//! }
-//! ```
+//! Please have a look at the [`start_search`] function for an example of how to use this crate, as
+//! it is the main entry point. In addition, you can check out the `examples` directory in the
+//! repository.
 //!
 //! # Feature flags
 //!
@@ -44,7 +30,7 @@
 )]
 #![allow(clippy::missing_errors_doc)]
 
-use std::collections::BTreeMap;
+use std::{borrow::Cow, collections::BTreeMap};
 
 use serde::{Deserialize, Serialize};
 
@@ -70,8 +56,6 @@ pub type Result<T, E = Error> = std::result::Result<T, E>;
 pub enum Error {
     #[error("failed deserializing JSON")]
     Json(#[from] serde_json::Error),
-    #[error("a HTTP request failed")]
-    Http(#[from] reqwest::Error),
     #[error("invalid semantic version string")]
     SemVer(#[from] semver::Error),
     #[error("the version part was missing in `{0}`")]
@@ -140,45 +124,132 @@ impl Index {
 ///
 /// # Example
 ///
-/// Download the index for the `anhow` crate and get the docs.rs link for the `anyhow::Result` item.
+/// Download the index for the `anyhow` crate and get the docs.rs link for the `anyhow::Result`
+/// item.
 ///
 /// ```no_run
-/// use docsearch::{Result, SimplePath, Version};
+/// use anyhow::Result;
+/// use docsearch::{SimplePath, Version};
 ///
-/// # #[tokio::main(flavor = "current_thread")]
-/// # async fn main() -> Result<()> {
-/// let path = "anyhow::Result".parse::<SimplePath>().unwrap();
-/// let index = docsearch::search(path.crate_name(), Version::Latest).await?;
-/// let link = index.find_link(&path).unwrap();
+/// #[tokio::main(flavor = "current_thread")]
+/// async fn main() -> Result<()> {
+///     // First parse the search query into a `SimplePath`. This ensures the query is actually
+///     // usable and allows to provide additional info.
+///     let query = "anyhow::Result".parse::<SimplePath>().unwrap();
 ///
-/// println!("{}", link);
-/// # Ok(())
-/// # }
+///     // Initiate a new search. It allows to not depend on a specific HTTP crate and instead
+///     // pass the task to the developer (that's you).
+///     let state = docsearch::start_search(query.crate_name(), Version::Latest);
+///     // First, download the HTML page content to find the URL to the search index.
+///     let content = download_url(state.url()).await?;
+///
+///     // Now try to find the the link to the actual search index.
+///     let state = state.find_index(&content)?;
+///     // Next, download the search index content.
+///     let content = download_url(state.url()).await?;
+///
+///     // Lastly, transform the search index content into an `Index` instance, containing all
+///     // information to create webpage links to an item within the scope of the requested crate.
+///     let index = state.transform_index(&content)?;
+///
+///     // Now we can use the index to query for our initial item.
+///     let link = index.find_link(&query).unwrap();
+///
+///     // And print out the resolved web link to it.
+///     println!("{link}");
+///
+///     Ok(())
+/// }
+///
+/// /// Simple helper function to download any HTTP page with `reqwest`, using a normal GET request.
+/// async fn download_url(url: &str) -> Result<String> {
+///     reqwest::Client::builder()
+///         .redirect(reqwest::redirect::Policy::limited(10))
+///         .build()?
+///         .get(url)
+///         .send()
+///         .await?
+///         .error_for_status()?
+///         .text()
+///         .await
+///         .map_err(Into::into)
+/// }
 /// ```
-pub async fn search(name: &str, version: Version) -> Result<Index> {
-    let (mapping, std) = if STD_CRATES.contains(&name) {
-        (crates::get_std().await?, true)
-    } else {
-        (crates::get_docsrs(name, version).await?, false)
-    };
+#[must_use]
+pub fn start_search(name: &str, version: Version) -> SearchPage<'_> {
+    let std = STD_CRATES.contains(&name);
+    let url = crates::get_page_url(std, name, &version);
 
-    Ok(transform(name, mapping, std)?)
+    SearchPage {
+        name,
+        version,
+        std,
+        url,
+    }
 }
 
-/// Convert the downloaded index and convert it into a simple path to URL path mapping for each
-/// contained crate. Additionally attach some extra data like the version and whether the crate is
-/// considered part of the stdlib.
-fn transform(name: &str, (version, index): (Version, String), std: bool) -> Result<Index> {
-    let mappings = index::load(&index)?;
+/// Initial state when starting a new search. Use the [`Self::url`] function to get the URL to
+/// download content from. The web page content must then be passed to [`Self::find_index`] to get
+/// to the next state.
+pub struct SearchPage<'a> {
+    name: &'a str,
+    version: Version,
+    std: bool,
+    url: Cow<'static, str>,
+}
 
-    mappings
-        .into_iter()
-        .find(|(crate_name, _)| crate_name == name)
-        .map(|(name, mapping)| Index {
-            name,
-            version: version.clone(),
-            mapping,
-            std,
+impl<'a> SearchPage<'a> {
+    /// URL to content that should be retrieved and passed to [`Self::find_index`].
+    #[must_use]
+    pub fn url(&self) -> &str {
+        &self.url
+    }
+
+    /// Try to find the index in the content downloaded from [`Self::url`], effectively transferring
+    /// to the next state in retrieving an `Index` instance.
+    pub fn find_index(self, body: &str) -> Result<SearchIndex<'a>> {
+        let (version, url) = crates::find_index_url(self.std, self.name, self.version, body)?;
+
+        Ok(SearchIndex {
+            name: self.name,
+            version,
+            std: self.std,
+            url,
         })
-        .ok_or(Error::CrateDataMissing)
+    }
+}
+
+/// Second and last state in retrieving a search index. Use the [`Self::url`] function to get the
+/// search index URL to download. The index's content must be passed to [`Self::transform_index`] to
+/// create the final [`Index`] instance.
+pub struct SearchIndex<'a> {
+    name: &'a str,
+    version: Version,
+    std: bool,
+    url: String,
+}
+
+impl<'a> SearchIndex<'a> {
+    /// URL to the search index that should be retrieved and passed to [`Self::transform_index`].
+    #[must_use]
+    pub fn url(&self) -> &str {
+        &self.url
+    }
+
+    /// Try to transform the raw index content into a simple "path-to-URL" mapping for each
+    /// contained crate.
+    pub fn transform_index(self, index_content: &str) -> Result<Index> {
+        let mappings = index::load(index_content)?;
+
+        mappings
+            .into_iter()
+            .find(|(crate_name, _)| crate_name == self.name)
+            .map(|(name, mapping)| Index {
+                name,
+                version: self.version.clone(),
+                mapping,
+                std: self.std,
+            })
+            .ok_or(Error::CrateDataMissing)
+    }
 }

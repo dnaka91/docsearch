@@ -5,7 +5,9 @@
 
 use std::env;
 
-use docsearch::{Result, SimplePath, Version};
+use anyhow::Result;
+use docsearch::{Index, SimplePath, Version};
+use reqwest::redirect::Policy;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<()> {
@@ -14,7 +16,7 @@ async fn main() -> Result<()> {
 
     let path = parse_args();
 
-    let index = docsearch::search(path.crate_name(), Version::Latest).await?;
+    let index = search(path.crate_name(), Version::Latest).await?;
     let link = index.find_link(&path);
 
     println!("Path: {}", path);
@@ -25,6 +27,31 @@ async fn main() -> Result<()> {
     }
 
     Ok(())
+}
+
+async fn search(name: &str, version: Version) -> Result<Index> {
+    let state = docsearch::start_search(name, version);
+    let content = reqwest::Client::builder()
+        .redirect(Policy::limited(10))
+        .build()?
+        .get(state.url())
+        .send()
+        .await?
+        .error_for_status()?
+        .text()
+        .await?;
+
+    let state = state.find_index(&content)?;
+    let content = reqwest::Client::builder()
+        .build()?
+        .get(state.url())
+        .send()
+        .await?
+        .error_for_status()?
+        .text()
+        .await?;
+
+    state.transform_index(&content).map_err(Into::into)
 }
 
 /// Parse the arguments of this example. Uses panic for the sake of simplicity.
