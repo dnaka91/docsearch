@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - ReleaseDate
 
+### Changed
+
+- Replace `unicode-xid` with `unicode-ident` for faster parsing of identifiers (and less memory
+  usage too).
+
 ## [0.3.0] - 2022-01-26
 
 ### Changed
