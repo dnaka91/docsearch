@@ -27,7 +27,7 @@ serde_repr = "0.1.7"
 serde_tuple = { version = "0.5.0", optional = true }
 thiserror = "1.0.30"
 tracing = "0.1.32"
-unicode-xid = "0.2.2"
+unicode-ident = "1.0.0"
 
 [dev-dependencies]
 anyhow = "1.0.56"

@@ -6,8 +6,6 @@ use std::{
     str::FromStr,
 };
 
-use unicode_xid::UnicodeXID;
-
 use crate::{error::ParseError, STD_CRATES};
 
 /// Path for any item within a crate (or just the crate itself) like `std::vec::Vec`,
@@ -97,13 +95,14 @@ impl Display for SimplePath {
 /// [`XID_continue`]: http://unicode.org/cldr/utility/list-unicodeset.jsp?a=%5B%3AXID_Continue%3A%5D&abb=on&g=&i=
 fn is_identifier_or_keyword(value: &str) -> bool {
     fn variant_one(first_char: char, value: &str) -> bool {
-        first_char.is_xid_start() && value.chars().skip(1).all(UnicodeXID::is_xid_continue)
+        unicode_ident::is_xid_start(first_char)
+            && value.chars().skip(1).all(unicode_ident::is_xid_continue)
     }
 
     fn variant_two(first_char: char, value: &str) -> bool {
         first_char == '_'
             && value.chars().skip(1).count() > 0
-            && value.chars().skip(1).all(UnicodeXID::is_xid_continue)
+            && value.chars().skip(1).all(unicode_ident::is_xid_continue)
     }
 
     let first_char = match value.chars().next() {
