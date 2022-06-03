@@ -1,0 +1,7 @@
+---
+source: src/crates.rs
+expression: data
+input_file: src/fixtures/syn-1.0.96.html
+---
+search-index-20220601-1.63.0-nightly-12cd71f4d.js
+

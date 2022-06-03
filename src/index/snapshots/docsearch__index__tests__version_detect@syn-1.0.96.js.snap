@@ -1,0 +1,7 @@
+---
+source: src/index/mod.rs
+expression: data
+input_file: src/index/fixtures/syn-1.0.96.js
+---
+V3
+

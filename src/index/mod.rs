@@ -34,7 +34,11 @@ impl Version {
             return Some(Self::V2);
         }
 
-        if index.ends_with(r#"if (window.initSearch) {window.initSearch(searchIndex)};"#) {
+        if index.ends_with(r#"if (window.initSearch) {window.initSearch(searchIndex)};"#)
+            || index.trim_end().ends_with(
+                r#"if (typeof exports !== 'undefined') {exports.searchIndex = searchIndex};"#,
+            )
+        {
             Some(Self::V3)
         } else {
             None
