@@ -99,7 +99,7 @@ fn parser(references: &[String]) -> impl Parser<char, JsJson, Error = Cheap<char
                 .or(just('r').to('\r'))
                 .or(just('t').to('\t'))
                 .or(just('u').ignore_then(
-                    filter(|c: &char| c.is_digit(16))
+                    filter(char::is_ascii_hexdigit)
                         .repeated()
                         .exactly(4)
                         .collect::<String>()
