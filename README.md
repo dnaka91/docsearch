@@ -12,7 +12,7 @@
 [doc-url]: https://docs.rs/docsearch
 
 Use the latest search index from `rustdoc` to find the docs.rs (or stdlib) URL for any item in a
-crate by its [simle path](https://doc.rust-lang.org/stable/reference/paths.html#simple-paths).
+crate by its [simple path](https://doc.rust-lang.org/stable/reference/paths.html#simple-paths).
 
 ## Usage
 
@@ -31,7 +31,7 @@ as it uses async/await and is bound to this runtime.
 
 ### Example
 
-For examples check out the [search](examples/search.rs) example or consult the [docs](doc-url).
+For examples check out the [search](examples/search.rs) example or consult the [docs](https://docs.rs/docsearch).
 
 ## License
 
