@@ -1,9 +1,10 @@
 [licenses]
 allow-osi-fsf-free = "both"
 exceptions = [
-    { allow = ["CC0-1.0"], name = "tiny-keccak", version = "*" },
-    { allow = ["MIT", "ISC", "OpenSSL"], name = "ring", version = "*" },
-    { allow = ["MPL-2.0"], name = "webpki-roots", version = "*" },
+    { allow = ["CC0-1.0"], name = "tiny-keccak" },
+    { allow = ["MIT", "ISC", "OpenSSL"], name = "ring" },
+    { allow = ["MPL-2.0"], name = "webpki-roots" },
+    { allow = ["Unicode-DFS-2016"], name = "unicode-ident" },
 ]
 
 [[licenses.clarify]]
