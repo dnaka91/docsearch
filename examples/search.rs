@@ -19,10 +19,10 @@ async fn main() -> Result<()> {
     let index = search(path.crate_name(), Version::Latest).await?;
     let link = index.find_link(&path);
 
-    println!("Path: {}", path);
+    println!("Path: {path}");
 
     match link {
-        Some(link) => println!("Link: {}", link),
+        Some(link) => println!("Link: {link}"),
         None => println!("Not found :-("),
     }
 

@@ -69,9 +69,9 @@ impl Index {
         };
 
         Some(if self.std {
-            format!("https://doc.rust-lang.org/nightly/{}", link)
+            format!("https://doc.rust-lang.org/nightly/{link}")
         } else {
-            format!("https://docs.rs/{}/{}/{}", self.name, self.version, link)
+            format!("https://docs.rs/{}/{}/{link}", self.name, self.version)
         })
     }
 }
