@@ -4,7 +4,7 @@
 [![Repository][crates-img]][crates-url]
 [![Documentation][doc-img]][doc-url]
 
-[build-img]: https://img.shields.io/github/workflow/status/dnaka91/docsearch/CI/main?style=for-the-badge
+[build-img]: https://img.shields.io/github/actions/workflow/status/dnaka91/docsearch/ci.yml?branch=main&style=for-the-badge
 [build-url]: https://github.com/dnaka91/docsearch/actions?query=workflow%3ACI
 [crates-img]: https://img.shields.io/crates/v/docsearch?style=for-the-badge
 [crates-url]: https://crates.io/crates/docsearch
