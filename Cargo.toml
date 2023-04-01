@@ -19,7 +19,7 @@ index-v1 = ["index-v2", "dep:chumsky", "dep:serde_tuple"]
 index-v2 = ["dep:serde_tuple"]
 
 [dependencies]
-chumsky = { version = "0.8.0", optional = true }
+chumsky = { version = "0.9.2", optional = true }
 semver = { version = "1.0.9", features = ["serde"] }
 serde = { version = "1.0.137", features = ["derive"] }
 serde_json = "1.0.81"
