@@ -10,7 +10,7 @@ thiserror:
   n:
     - Error
   q:
-    - thiserror
+    0: thiserror
   d:
     - ""
   i:

@@ -1,7 +1,6 @@
 [licenses]
 allow-osi-fsf-free = "both"
 exceptions = [
-    { allow = ["CC0-1.0"], name = "tiny-keccak" },
     { allow = ["MIT", "ISC", "OpenSSL"], name = "ring" },
     { allow = ["MPL-2.0"], name = "webpki-roots" },
     { allow = ["Unicode-DFS-2016"], name = "unicode-ident" },
@@ -21,4 +20,13 @@ version = "*"
 expression = "MIT AND ISC AND OpenSSL"
 license-files = [
     { path = "LICENSE", hash = 0xbd0eed23 },
+]
+
+[bans]
+skip = [
+	{ name = "hashbrown", version = "0.12" },
+	{ name = "syn", version = "1" },
+]
+skip-tree = [
+	{ name = "windows-sys", version = "0.45", depth = 3 },
 ]

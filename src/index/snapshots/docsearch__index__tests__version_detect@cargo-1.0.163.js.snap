@@ -1,0 +1,7 @@
+---
+source: src/index/mod.rs
+expression: data
+input_file: src/index/fixtures/cargo-1.0.163.js
+---
+V3
+

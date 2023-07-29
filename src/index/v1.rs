@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use chumsky::{error::Cheap, prelude::*};
+use chumsky::prelude::*;
 
 use super::{v2::RawCrate, RawIndexData};
 use crate::error::IndexV1Error as Error;
@@ -23,18 +23,12 @@ pub(super) fn load_raw(index: &str) -> Result<RawIndexData, Error> {
 
     let crates = entries
         .map(|(name, index)| {
-            let json = match parser(&r).parse(index) {
+            let json = match parser(&r).parse(index).into_result() {
                 Ok(json) => json,
                 Err(errs) => {
                     return Err(Error::InvalidIndexJavaScript(errs.first().map_or_else(
                         || "Unknown error".to_owned(),
-                        |err| {
-                            let span = String::from_utf8_lossy(&index.as_bytes()[err.span()]);
-                            match err.label() {
-                                Some(label) => format!("{label}: {span}"),
-                                None => span.into_owned(),
-                            }
-                        },
+                        |err| format!("Parse error: {err}"),
                     )));
                 }
             };
@@ -85,88 +79,101 @@ impl TryFrom<JsJson> for serde_json::Value {
     }
 }
 
-fn parser(references: &[String]) -> impl Parser<char, JsJson, Error = Cheap<char>> + '_ {
+#[allow(clippy::too_many_lines)]
+fn parser(references: &[String]) -> impl Parser<'_, &str, JsJson> {
     recursive(|value| {
-        let number = text::int(10).from_str().unwrapped().labelled("number");
+        let number = text::int(10).from_str().unwrapped().boxed();
 
-        let escape = just('\\').ignore_then(
-            just('\\')
-                .or(just('/'))
-                .or(just('"'))
-                .or(just('b').to('\x08'))
-                .or(just('f').to('\x0C'))
-                .or(just('n').to('\n'))
-                .or(just('r').to('\r'))
-                .or(just('t').to('\t'))
-                .or(just('u').ignore_then(
-                    filter(char::is_ascii_hexdigit)
-                        .repeated()
-                        .exactly(4)
-                        .collect::<String>()
-                        .validate(|digits, _span, _emit| {
-                            char::from_u32(u32::from_str_radix(&digits, 16).unwrap()).unwrap_or(
-                                '\u{FFFD}', // unicode replacement character
-                            )
-                        }),
+        let escape = just('\\')
+            .then(choice((
+                just('\\'),
+                just('/'),
+                just('"'),
+                just('b').to('\x08'),
+                just('f').to('\x0C'),
+                just('n').to('\n'),
+                just('r').to('\r'),
+                just('t').to('\t'),
+                just('u').ignore_then(text::digits(16).exactly(4).slice().validate(
+                    |digits, _span, _emit| {
+                        char::from_u32(u32::from_str_radix(digits, 16).unwrap()).unwrap_or(
+                            '\u{FFFD}', // unicode replacement character
+                        )
+                    },
                 )),
-        );
+            )))
+            .ignored()
+            .boxed();
 
-        let string = just('"')
-            .ignore_then(filter(|c| *c != '\\' && *c != '"').or(escape).repeated())
-            .then_ignore(just('"'))
-            .collect::<String>()
-            .labelled("string");
+        let string = none_of("\\\"")
+            .ignored()
+            .or(escape)
+            .repeated()
+            .slice()
+            .map(ToString::to_string)
+            .delimited_by(just('"'), just('"'))
+            .boxed();
 
         let array = value
             .clone()
-            .chain(just(',').ignore_then(value.clone()).repeated())
-            .or_not()
-            .flatten()
-            .delimited_by(just('['), just(']'))
-            .map(JsJson::Array)
-            .labelled("array");
+            .separated_by(just(',').padded())
+            .allow_trailing()
+            .collect()
+            .padded()
+            .delimited_by(
+                just('['),
+                just(']').ignored().recover_with(via_parser(end())),
+            )
+            .boxed();
 
-        let member = string.then_ignore(just(':').padded()).then(value);
+        let member = string.clone().then_ignore(just(':').padded()).then(value);
         let object = member
             .clone()
-            .chain(just(',').padded().ignore_then(member).repeated())
-            .or_not()
-            .flatten()
+            .separated_by(just(',').padded())
+            .collect()
             .padded()
-            .delimited_by(just('{'), just('}'))
-            .collect::<HashMap<String, JsJson>>()
-            .map(JsJson::Object)
-            .labelled("object");
+            .delimited_by(
+                just('{'),
+                just('}').ignored().recover_with(via_parser(end())),
+            )
+            .boxed();
 
-        let reference = just("R")
-            .ignore_then(number.delimited_by(just('['), just(']')).map(
-                |v| match references.get(v) {
+        let reference =
+            just("R").ignore_then(number.clone().delimited_by(just('['), just(']')).map(|v| {
+                match references.get(v) {
                     Some(s) => JsJson::Str(String::clone(s)),
                     None => JsJson::Invalid,
-                },
-            ))
-            .labelled("R");
+                }
+            }));
 
-        just("null")
-            .to(JsJson::Null)
-            .labelled("null")
-            .or(number.map(JsJson::Num))
-            .or(string.map(JsJson::Str))
-            .or(array)
-            .or(object)
-            .or(just("N").to(JsJson::Null).labelled("N"))
-            .or(just("E").to(JsJson::Str(String::new())).labelled("E"))
-            .or(just("T").to(JsJson::Str("t".to_owned())).labelled("T"))
-            .or(just("U").to(JsJson::Str("u".to_owned())).labelled("U"))
-            .or(reference)
-            .recover_with(nested_delimiters('{', '}', [('[', ']')], |_| {
-                JsJson::Invalid
-            }))
-            .recover_with(nested_delimiters('[', ']', [('{', '}')], |_| {
-                JsJson::Invalid
-            }))
-            .recover_with(skip_then_retry_until(['}', ']']))
-            .padded()
+        choice((
+            just("null").to(JsJson::Null),
+            number.map(JsJson::Num),
+            string.map(JsJson::Str),
+            array.map(JsJson::Array),
+            object.map(JsJson::Object),
+            just("N").to(JsJson::Null),
+            just("E").to(JsJson::Str(String::new())),
+            just("T").to(JsJson::Str("t".to_owned())),
+            just("U").to(JsJson::Str("u".to_owned())),
+            reference,
+        ))
+        .recover_with(via_parser(nested_delimiters(
+            '{',
+            '}',
+            [('[', ']')],
+            |_| JsJson::Invalid,
+        )))
+        .recover_with(via_parser(nested_delimiters(
+            '[',
+            ']',
+            [('{', '}')],
+            |_| JsJson::Invalid,
+        )))
+        .recover_with(skip_then_retry_until(
+            any().ignored(),
+            one_of(",]}").ignored()
+        ))
+        .padded()
     })
-    .then_ignore(end().recover_with(skip_then_retry_until([])))
 }

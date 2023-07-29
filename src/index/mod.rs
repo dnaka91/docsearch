@@ -1,9 +1,15 @@
 //! Handling of the index data and its transformation in a more usable format as well as a mapping
 //! of simple paths to rustdoc URL.
 
-use std::collections::{BTreeMap, HashMap};
+use std::{
+    collections::{BTreeMap, HashMap},
+    fmt,
+};
 
-use serde::Deserialize;
+use serde::{
+    de::{SeqAccess, Visitor},
+    Deserialize, Deserializer,
+};
 use serde_repr::Deserialize_repr;
 
 use crate::error::{Error, Result};
@@ -152,6 +158,38 @@ impl ItemType {
             Self::TraitAlias => "traitalias",
         }
     }
+
+    const fn from_raw(value: u8) -> Option<Self> {
+        Some(match value {
+            0 => Self::Module,
+            1 => Self::ExternCrate,
+            2 => Self::Import,
+            3 => Self::Struct,
+            4 => Self::Enum,
+            5 => Self::Function,
+            6 => Self::Typedef,
+            7 => Self::Static,
+            8 => Self::Trait,
+            9 => Self::Impl,
+            10 => Self::TyMethod,
+            11 => Self::Method,
+            12 => Self::StructField,
+            13 => Self::Variant,
+            14 => Self::Macro,
+            15 => Self::Primitive,
+            16 => Self::AssocType,
+            17 => Self::Constant,
+            18 => Self::AssocConst,
+            19 => Self::Union,
+            20 => Self::ForeignType,
+            21 => Self::Keyword,
+            22 => Self::OpaqueTy,
+            23 => Self::ProcAttribute,
+            24 => Self::ProcDerive,
+            25 => Self::TraitAlias,
+            _ => return None,
+        })
+    }
 }
 
 /// The whole index data for a crate. It usually contains only one entry for the crate it was
@@ -175,12 +213,14 @@ struct RawCrateData {
     /// Doc string for the crate. Seems to always be `github\u{2002}crates-io\u{2002}docs-rs`.
     doc: String,
     /// Type of item.
+    #[serde(deserialize_with = "t")]
     t: Vec<ItemType>,
     /// Simple name without the path.
     n: Vec<String>,
     /// Module path of the item. This uses previous items as reference and an empty value means to
     /// use the value of the previous item. Similar to being still in the same _directory_.
-    q: Vec<String>,
+    #[serde(deserialize_with = "q")]
+    q: BTreeMap<usize, String>,
     /// Short, one line description of the item. Maybe contain HTML tags and is likely truncated.
     d: Vec<String>,
     /// Index of the parent item. For example if the item is a method, it references the index of
@@ -293,19 +333,19 @@ fn transform(raw: RawIndexData) -> IndexData {
         crates: raw
             .crates
             .into_iter()
-            .map(|(name, raw_data)| {
+            .map(|(name, mut raw_data)| {
                 let length = raw_data.t.len();
                 let (items, _) = raw_data
                     .t
                     .into_iter()
+                    .enumerate()
                     .zip(raw_data.n.into_iter())
-                    .zip(raw_data.q.into_iter())
                     .zip(raw_data.d.into_iter())
                     .zip(raw_data.i.into_iter())
                     .fold(
                         (Vec::with_capacity(length), String::new()),
-                        |(mut items, path), ((((t, n), q), d), i)| {
-                            let path = if q.is_empty() { path } else { q };
+                        |(mut items, path), ((((pos, t), n), d), i)| {
+                            let path = raw_data.q.remove(&pos).unwrap_or(path);
                             items.push(IndexItem {
                                 ty: t,
                                 name: n,
@@ -391,11 +431,109 @@ fn generate_crate_mapping(data: CrateData) -> BTreeMap<String, String> {
         .collect()
 }
 
+fn t<'de, D>(deserializer: D) -> Result<Vec<ItemType>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    deserializer.deserialize_any(VecItemTypeVisitor)
+}
+
+struct VecItemTypeVisitor;
+
+impl<'de> Visitor<'de> for VecItemTypeVisitor {
+    type Value = Vec<ItemType>;
+
+    fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str("item types either as an array of IDs or a string of ASCII chars")
+    }
+
+    fn visit_str<E>(self, v: &str) -> std::result::Result<Self::Value, E>
+    where
+        E: serde::de::Error,
+    {
+        v.bytes()
+            .map(|ascii| {
+                ascii
+                    .is_ascii_uppercase()
+                    .then(|| ItemType::from_raw(ascii - b'A'))
+                    .flatten()
+                    .ok_or_else(|| {
+                        E::custom(format!("invalid ASCII character `{}`", ascii as char))
+                    })
+            })
+            .collect()
+    }
+
+    fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
+    where
+        A: SeqAccess<'de>,
+    {
+        let mut list = Vec::with_capacity(seq.size_hint().unwrap_or(0));
+
+        while let Some(element) = seq.next_element()? {
+            list.push(element);
+        }
+
+        Ok(list)
+    }
+}
+
+fn q<'de, D>(deserializer: D) -> Result<BTreeMap<usize, String>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    deserializer.deserialize_seq(VecPathVisitor)
+}
+
+struct VecPathVisitor;
+
+impl<'de> Visitor<'de> for VecPathVisitor {
+    type Value = BTreeMap<usize, String>;
+
+    fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str("item types either as an array of IDs or a string of ASCII chars")
+    }
+
+    fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
+    where
+        A: SeqAccess<'de>,
+    {
+        #[derive(Deserialize)]
+        #[serde(untagged)]
+        enum Value {
+            String(String),
+            Tuple((usize, String)),
+        }
+
+        let mut map = BTreeMap::new();
+        let mut position = 0;
+
+        while let Some(element) = seq.next_element::<Value>()? {
+            let (key, value) = match element {
+                Value::String(name) => {
+                    if name.is_empty() {
+                        position += 1;
+                        continue;
+                    }
+                    (position, name)
+                }
+                Value::Tuple((position, name)) => (position, name),
+            };
+
+            map.insert(key, value);
+            position += 1;
+        }
+
+        Ok(map)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::fs;
 
     use insta::glob;
+    use serde_test::Token;
 
     use super::*;
 
@@ -459,5 +597,96 @@ mod tests {
                 .map(generate_mapping);
             insta::assert_yaml_snapshot!(data);
         });
+    }
+
+    #[test]
+    fn test_t() {
+        #[derive(Debug, PartialEq, Deserialize)]
+        struct Wrapper {
+            #[serde(deserialize_with = "t")]
+            value: Vec<ItemType>,
+        }
+
+        let wrapper = Wrapper {
+            value: vec![ItemType::Module],
+        };
+
+        serde_test::assert_de_tokens(
+            &wrapper,
+            &[
+                Token::Struct {
+                    name: "Wrapper",
+                    len: 1,
+                },
+                Token::Str("value"),
+                Token::Str("A"),
+                Token::StructEnd,
+            ],
+        );
+        serde_test::assert_de_tokens(
+            &wrapper,
+            &[
+                Token::Struct {
+                    name: "Wrapper",
+                    len: 1,
+                },
+                Token::Str("value"),
+                Token::Seq { len: Some(1) },
+                Token::I64(0),
+                Token::SeqEnd,
+                Token::StructEnd,
+            ],
+        );
+    }
+
+    #[test]
+    fn test_q() {
+        #[derive(Debug, PartialEq, Deserialize)]
+        struct Wrapper {
+            #[serde(deserialize_with = "q")]
+            value: BTreeMap<usize, String>,
+        }
+
+        let wrapper = Wrapper {
+            value: [(0, "test".to_owned()), (2, "test::two".to_owned())].into(),
+        };
+
+        serde_test::assert_de_tokens(
+            &wrapper,
+            &[
+                Token::Struct {
+                    name: "Wrapper",
+                    len: 1,
+                },
+                Token::Str("value"),
+                Token::Seq { len: Some(2) },
+                Token::Seq { len: Some(2) },
+                Token::I64(0),
+                Token::Str("test"),
+                Token::SeqEnd,
+                Token::Seq { len: Some(2) },
+                Token::I64(2),
+                Token::Str("test::two"),
+                Token::SeqEnd,
+                Token::SeqEnd,
+                Token::StructEnd,
+            ],
+        );
+        serde_test::assert_de_tokens(
+            &wrapper,
+            &[
+                Token::Struct {
+                    name: "Wrapper",
+                    len: 1,
+                },
+                Token::Str("value"),
+                Token::Seq { len: Some(3) },
+                Token::Str("test"),
+                Token::Str(""),
+                Token::Str("test::two"),
+                Token::SeqEnd,
+                Token::StructEnd,
+            ],
+        );
     }
 }

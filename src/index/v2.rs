@@ -32,7 +32,11 @@ impl From<RawCrate> for RawCrateData {
             q: raw
                 .i
                 .iter_mut()
-                .map(|entry| entry.q.take().unwrap_or_default())
+                .enumerate()
+                .filter_map(|(i, entry)| {
+                    let q = entry.q.take().unwrap_or_default();
+                    (!q.is_empty()).then_some((i, q))
+                })
                 .collect(),
             d: raw
                 .i

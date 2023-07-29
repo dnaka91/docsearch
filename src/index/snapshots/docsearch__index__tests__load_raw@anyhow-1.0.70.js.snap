@@ -1,7 +1,7 @@
 ---
 source: src/index/mod.rs
 expression: data
-input_file: src/index/fixtures/anyhow-1.0.53.js
+input_file: src/index/fixtures/anyhow-1.0.70.js
 ---
 anyhow:
   doc: github crates-io docs-rs
@@ -34,6 +34,8 @@ anyhow:
     - Method
     - Macro
     - Method
+    - Method
+    - Macro
     - Method
     - Method
     - Method
@@ -90,6 +92,7 @@ anyhow:
     - ensure
     - fmt
     - fmt
+    - format_err
     - from
     - from
     - from
@@ -104,6 +107,7 @@ anyhow:
     - new
     - next
     - next_back
+    - provide
     - root_cause
     - size_hint
     - to_owned
@@ -147,17 +151,19 @@ anyhow:
     - Return early with an error if a condition is not satisfied.
     - ""
     - ""
+    - Construct an ad-hoc error from a string or existing non-…
+    - Returns the argument unchanged.
     - ""
     - ""
-    - ""
-    - ""
-    - ""
-    - ""
+    - Returns the argument unchanged.
+    - "Calls <code>U::from(self)</code>."
+    - "Calls <code>U::from(self)</code>."
     - ""
     - Returns true if <code>E</code> is the type held by this error object.
     - ""
     - Create a new error object from a printable error message.
     - Create a new error object from any error type.
+    - ""
     - ""
     - ""
     - ""
@@ -179,59 +185,97 @@ anyhow:
     - 0
     - 0
     - 0
-    - 1
-    - 1
-    - 1
+    - 2
+    - 2
+    - 2
     - 0
-    - 1
     - 2
-    - 1
+    - 5
     - 2
-    - 1
+    - 5
+    - 2
+    - 5
+    - 5
+    - 21
+    - 2
+    - 5
     - 2
     - 2
-    - 3
-    - 1
     - 2
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
+    - 2
+    - 2
+    - 2
     - 0
-    - 1
-    - 1
-    - 1
-    - 1
-    - 1
-    - 2
-    - 1
     - 2
     - 2
-    - 1
-    - 2
-    - 1
-    - 1
+    - 0
     - 2
     - 2
     - 2
-    - 1
+    - 5
+    - 2
+    - 5
+    - 5
+    - 2
+    - 5
     - 2
     - 2
-    - 1
-    - 1
+    - 5
+    - 5
+    - 5
     - 2
-    - 1
     - 2
-    - 1
+    - 5
+    - 5
     - 2
-    - 3
+    - 2
+    - 5
+    - 2
+    - 5
+    - 2
+    - 5
+    - 21
   p:
+    - - Typedef
+      - Result
     - - Struct
       - Error
+    - - Trait
+      - Error
+    - - Struct
+      - Backtrace
     - - Struct
       - Chain
+    - - Trait
+      - Display
+    - - Trait
+      - Send
+    - - Trait
+      - Sync
+    - - Trait
+      - Debug
+    - - Enum
+      - Result
+    - - Enum
+      - Option
+    - - Struct
+      - Formatter
+    - - Typedef
+      - Result
+    - - Primitive
+      - never
+    - - Primitive
+      - bool
+    - - Primitive
+      - usize
+    - - Struct
+      - Demand
+    - - Struct
+      - String
+    - - Struct
+      - TypeId
+    - - Trait
+      - FnOnce
     - - Trait
       - Context
 

@@ -1,0 +1,59 @@
+---
+source: src/index/mod.rs
+expression: data
+input_file: src/index/fixtures/anyhow-1.0.72.js
+---
+anyhow:
+  "anyhow::Chain": anyhow/struct.Chain.html
+  "anyhow::Chain::borrow": "anyhow/struct.Chain.html#method.borrow"
+  "anyhow::Chain::borrow_mut": "anyhow/struct.Chain.html#method.borrow_mut"
+  "anyhow::Chain::clone": "anyhow/struct.Chain.html#method.clone"
+  "anyhow::Chain::clone_into": "anyhow/struct.Chain.html#method.clone_into"
+  "anyhow::Chain::default": "anyhow/struct.Chain.html#method.default"
+  "anyhow::Chain::from": "anyhow/struct.Chain.html#method.from"
+  "anyhow::Chain::into": "anyhow/struct.Chain.html#method.into"
+  "anyhow::Chain::into_iter": "anyhow/struct.Chain.html#method.into_iter"
+  "anyhow::Chain::len": "anyhow/struct.Chain.html#method.len"
+  "anyhow::Chain::new": "anyhow/struct.Chain.html#method.new"
+  "anyhow::Chain::next": "anyhow/struct.Chain.html#method.next"
+  "anyhow::Chain::next_back": "anyhow/struct.Chain.html#method.next_back"
+  "anyhow::Chain::size_hint": "anyhow/struct.Chain.html#method.size_hint"
+  "anyhow::Chain::to_owned": "anyhow/struct.Chain.html#method.to_owned"
+  "anyhow::Chain::try_from": "anyhow/struct.Chain.html#method.try_from"
+  "anyhow::Chain::try_into": "anyhow/struct.Chain.html#method.try_into"
+  "anyhow::Chain::type_id": "anyhow/struct.Chain.html#method.type_id"
+  "anyhow::Context": anyhow/trait.Context.html
+  "anyhow::Context::context": "anyhow/trait.Context.html#tymethod.context"
+  "anyhow::Context::with_context": "anyhow/trait.Context.html#tymethod.with_context"
+  "anyhow::Error": anyhow/struct.Error.html
+  "anyhow::Error::as_ref": "anyhow/struct.Error.html#method.as_ref"
+  "anyhow::Error::backtrace": "anyhow/struct.Error.html#method.backtrace"
+  "anyhow::Error::borrow": "anyhow/struct.Error.html#method.borrow"
+  "anyhow::Error::borrow_mut": "anyhow/struct.Error.html#method.borrow_mut"
+  "anyhow::Error::chain": "anyhow/struct.Error.html#method.chain"
+  "anyhow::Error::context": "anyhow/struct.Error.html#method.context"
+  "anyhow::Error::deref": "anyhow/struct.Error.html#method.deref"
+  "anyhow::Error::deref_mut": "anyhow/struct.Error.html#method.deref_mut"
+  "anyhow::Error::downcast": "anyhow/struct.Error.html#method.downcast"
+  "anyhow::Error::downcast_mut": "anyhow/struct.Error.html#method.downcast_mut"
+  "anyhow::Error::downcast_ref": "anyhow/struct.Error.html#method.downcast_ref"
+  "anyhow::Error::drop": "anyhow/struct.Error.html#method.drop"
+  "anyhow::Error::fmt": "anyhow/struct.Error.html#method.fmt"
+  "anyhow::Error::from": "anyhow/struct.Error.html#method.from"
+  "anyhow::Error::into": "anyhow/struct.Error.html#method.into"
+  "anyhow::Error::is": "anyhow/struct.Error.html#method.is"
+  "anyhow::Error::msg": "anyhow/struct.Error.html#method.msg"
+  "anyhow::Error::new": "anyhow/struct.Error.html#method.new"
+  "anyhow::Error::provide": "anyhow/struct.Error.html#method.provide"
+  "anyhow::Error::root_cause": "anyhow/struct.Error.html#method.root_cause"
+  "anyhow::Error::to_string": "anyhow/struct.Error.html#method.to_string"
+  "anyhow::Error::try_from": "anyhow/struct.Error.html#method.try_from"
+  "anyhow::Error::try_into": "anyhow/struct.Error.html#method.try_into"
+  "anyhow::Error::type_id": "anyhow/struct.Error.html#method.type_id"
+  "anyhow::Ok": anyhow/fn.Ok.html
+  "anyhow::Result": anyhow/type.Result.html
+  "anyhow::anyhow": anyhow/macro.anyhow.html
+  "anyhow::bail": anyhow/macro.bail.html
+  "anyhow::ensure": anyhow/macro.ensure.html
+  "anyhow::format_err": anyhow/import.format_err.html
+

@@ -1,0 +1,7 @@
+---
+source: src/crates.rs
+expression: data
+input_file: src/fixtures/serde-1.0.163.html
+---
+search-index-20230510-1.71.0-nightly-cba14074b.js
+
