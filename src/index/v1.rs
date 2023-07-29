@@ -1,6 +1,19 @@
+#![allow(clippy::cast_possible_truncation)]
+
 use std::collections::HashMap;
 
-use chumsky::prelude::*;
+use winnow::{
+    ascii::dec_uint,
+    combinator::{
+        cut_err, delimited, fail, fold_repeat, peek, preceded, separated0, separated_pair, success,
+        terminated,
+    },
+    dispatch,
+    error::StrContext,
+    stream::AsChar,
+    token::{any, none_of, take_while},
+    PResult, Parser, Stateful,
+};
 
 use super::{v2::RawCrate, RawIndexData};
 use crate::error::IndexV1Error as Error;
@@ -23,13 +36,13 @@ pub(super) fn load_raw(index: &str) -> Result<RawIndexData, Error> {
 
     let crates = entries
         .map(|(name, index)| {
-            let json = match parser(&r).parse(index).into_result() {
+            let json = match json.parse(Stateful {
+                input: index,
+                state: r.as_slice(),
+            }) {
                 Ok(json) => json,
-                Err(errs) => {
-                    return Err(Error::InvalidIndexJavaScript(errs.first().map_or_else(
-                        || "Unknown error".to_owned(),
-                        |err| format!("Parse error: {err}"),
-                    )));
+                Err(err) => {
+                    return Err(Error::InvalidIndexJavaScript(format!("Parse error: {err}")));
                 }
             };
             let json = serde_json::Value::try_from(json).map_err(Error::InvalidIndexJavaScript)?;
@@ -46,7 +59,6 @@ pub(super) fn load_raw(index: &str) -> Result<RawIndexData, Error> {
 
 #[derive(Clone, Debug)]
 enum JsJson {
-    Invalid,
     Null,
     Str(String),
     Num(usize),
@@ -59,7 +71,6 @@ impl TryFrom<JsJson> for serde_json::Value {
 
     fn try_from(value: JsJson) -> Result<Self, Self::Error> {
         Ok(match value {
-            JsJson::Invalid => return Err("Invalid JSON element".to_owned()),
             JsJson::Null => serde_json::Value::Null,
             JsJson::Str(string) => serde_json::Value::String(string),
             JsJson::Num(num) => serde_json::Value::Number(num.into()),
@@ -79,101 +90,125 @@ impl TryFrom<JsJson> for serde_json::Value {
     }
 }
 
-#[allow(clippy::too_many_lines)]
-fn parser(references: &[String]) -> impl Parser<'_, &str, JsJson> {
-    recursive(|value| {
-        let number = text::int(10).from_str().unwrapped().boxed();
+type Stream<'i> = Stateful<&'i str, &'i [String]>;
 
-        let escape = just('\\')
-            .then(choice((
-                just('\\'),
-                just('/'),
-                just('"'),
-                just('b').to('\x08'),
-                just('f').to('\x0C'),
-                just('n').to('\n'),
-                just('r').to('\r'),
-                just('t').to('\t'),
-                just('u').ignore_then(text::digits(16).exactly(4).slice().validate(
-                    |digits, _span, _emit| {
-                        char::from_u32(u32::from_str_radix(digits, 16).unwrap()).unwrap_or(
-                            '\u{FFFD}', // unicode replacement character
-                        )
-                    },
-                )),
-            )))
-            .ignored()
-            .boxed();
+fn json(input: &mut Stream<'_>) -> PResult<JsJson> {
+    delimited(ws, json_value, ws).parse_next(input)
+}
 
-        let string = none_of("\\\"")
-            .ignored()
-            .or(escape)
-            .repeated()
-            .slice()
-            .map(ToString::to_string)
-            .delimited_by(just('"'), just('"'))
-            .boxed();
+fn json_value(input: &mut Stream<'_>) -> PResult<JsJson> {
+    dispatch!(
+        peek(any);
+        'n' => null.value(JsJson::Null),
+        '0'..='9' => number.map(JsJson::Num),
+        '"' => string.map(JsJson::Str),
+        '[' => array.map(JsJson::Array),
+        '{' => object.map(JsJson::Object),
+        'N' => "N".value(JsJson::Null),
+        'E' => "E".map(|_| JsJson::Str(String::new())),
+        'T' => "T".map(|_| JsJson::Str("t".to_owned())),
+        'U' => "U".map(|_| JsJson::Str("u".to_owned())),
+        'R' => reference,
+        _ => fail,
+    )
+    .context(StrContext::Label("value"))
+    .parse_next(input)
+}
 
-        let array = value
-            .clone()
-            .separated_by(just(',').padded())
-            .allow_trailing()
-            .collect()
-            .padded()
-            .delimited_by(
-                just('['),
-                just(']').ignored().recover_with(via_parser(end())),
-            )
-            .boxed();
+fn null<'i>(input: &mut Stream<'i>) -> PResult<&'i str> {
+    "null".context(StrContext::Label("null")).parse_next(input)
+}
 
-        let member = string.clone().then_ignore(just(':').padded()).then(value);
-        let object = member
-            .clone()
-            .separated_by(just(',').padded())
-            .collect()
-            .padded()
-            .delimited_by(
-                just('{'),
-                just('}').ignored().recover_with(via_parser(end())),
-            )
-            .boxed();
+fn number(input: &mut Stream<'_>) -> PResult<usize> {
+    dec_uint
+        .map(|v: u64| v as usize)
+        .context(StrContext::Label("number"))
+        .parse_next(input)
+}
 
-        let reference =
-            just("R").ignore_then(number.clone().delimited_by(just('['), just(']')).map(|v| {
-                match references.get(v) {
-                    Some(s) => JsJson::Str(String::clone(s)),
-                    None => JsJson::Invalid,
-                }
-            }));
+fn string(input: &mut Stream<'_>) -> PResult<String> {
+    preceded(
+        '\"',
+        cut_err(terminated(
+            fold_repeat(0.., character, String::new, |mut string, c| {
+                string.push(c);
+                string
+            }),
+            '\"',
+        )),
+    )
+    .context(StrContext::Label("string"))
+    .parse_next(input)
+}
 
-        choice((
-            just("null").to(JsJson::Null),
-            number.map(JsJson::Num),
-            string.map(JsJson::Str),
-            array.map(JsJson::Array),
-            object.map(JsJson::Object),
-            just("N").to(JsJson::Null),
-            just("E").to(JsJson::Str(String::new())),
-            just("T").to(JsJson::Str("t".to_owned())),
-            just("U").to(JsJson::Str("u".to_owned())),
-            reference,
-        ))
-        .recover_with(via_parser(nested_delimiters(
-            '{',
-            '}',
-            [('[', ']')],
-            |_| JsJson::Invalid,
-        )))
-        .recover_with(via_parser(nested_delimiters(
-            '[',
+fn character(input: &mut Stream<'_>) -> PResult<char> {
+    let c = none_of('\"').parse_next(input)?;
+    if c == '\\' {
+        dispatch!(
+            any;
+            '"' => success('"'),
+            '\\' => success('\\'),
+            '/'  => success('/'),
+            'b' => success('\x08'),
+            'f' => success('\x0C'),
+            'n' => success('\n'),
+            'r' => success('\r'),
+            't' => success('\t'),
+            'u' => unicode_escape,
+            _ => fail,
+        )
+        .parse_next(input)
+    } else {
+        Ok(c)
+    }
+}
+
+fn unicode_escape(input: &mut Stream<'_>) -> PResult<char> {
+    take_while(4, AsChar::is_hex_digit)
+        .map(|hex| char::from_u32(u32::from_str_radix(hex, 16).unwrap()).unwrap_or('\u{FFFD}'))
+        .parse_next(input)
+}
+
+fn array(input: &mut Stream<'_>) -> PResult<Vec<JsJson>> {
+    preceded(
+        ('[', ws),
+        cut_err(terminated(separated0(json_value, (ws, ',', ws)), (ws, ']'))),
+    )
+    .context(StrContext::Label("array"))
+    .parse_next(input)
+}
+
+fn object(input: &mut Stream<'_>) -> PResult<HashMap<String, JsJson>> {
+    preceded(
+        ('{', ws),
+        cut_err(terminated(separated0(key_value, (ws, ',', ws)), (ws, '}'))),
+    )
+    .context(StrContext::Label("object"))
+    .parse_next(input)
+}
+
+fn key_value(input: &mut Stream<'_>) -> PResult<(String, JsJson)> {
+    separated_pair(string, cut_err((ws, ':', ws)), json_value).parse_next(input)
+}
+
+fn reference(input: &mut Stream<'_>) -> PResult<JsJson> {
+    preceded(
+        "R[",
+        cut_err(terminated(
+            dec_uint.try_map(|v: u64| {
+                input
+                    .state
+                    .get(v as usize)
+                    .map(|r| JsJson::Str(r.clone()))
+                    .ok_or(Error::MissingReference)
+            }),
             ']',
-            [('{', '}')],
-            |_| JsJson::Invalid,
-        )))
-        .recover_with(skip_then_retry_until(
-            any().ignored(),
-            one_of(",]}").ignored()
-        ))
-        .padded()
-    })
+        )),
+    )
+    .context(StrContext::Label("reference"))
+    .parse_next(input)
+}
+
+fn ws<'a>(input: &mut Stream<'a>) -> PResult<&'a str> {
+    take_while(0.., &[' ', '\t', '\r', '\n']).parse_next(input)
 }
