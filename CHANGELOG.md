@@ -4,10 +4,17 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased] - ReleaseDate
+
+### Fixed
+
+- Adjust to changes in the latest index format.
+
+### Refactoring
+
+- Replace the `chumsky` parser with `winnow` for a more lightweight, faster and easier to understand parsing logic of the v1 index format.
 
 ## [0.3.2] - 2022-06-03
 
@@ -19,8 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Replace `unicode-xid` with `unicode-ident` for faster parsing of identifiers (and less memory
-  usage too).
+- Replace `unicode-xid` with `unicode-ident` for faster parsing of identifiers (and less memory usage too).
 
 ## [0.3.0] - 2022-01-26
 
@@ -38,8 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Paths that only contain the crate name with no item (like just `anyhow` or `std`), will now
-  resolve to the base crate docs instead of failing to find a link.
+- Paths that only contain the crate name with no item (like just `anyhow` or `std`), will now resolve to the base crate docs instead of failing to find a link.
 
 ### Changed
 
