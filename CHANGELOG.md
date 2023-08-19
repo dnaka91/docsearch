@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased] - ReleaseDate
 
+- Pin `serde` version to avoid using pre-compiled binaries during the build process.
+
 ## [0.3.3] - 2023-07-29
 
 ### Fixed
