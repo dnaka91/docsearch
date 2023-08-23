@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased] - ReleaseDate
 
+## [0.3.5] - 2023-08-23
+
 - Unpin `serde` again and require at least `1.0.185`, which resolves the issue.
 
 ## [0.3.4] - 2023-08-19
@@ -73,7 +75,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Initial release.
 
-[Unreleased]: https://github.com/dnaka91/docsearch/compare/v0.3.4...HEAD
+[Unreleased]: https://github.com/dnaka91/docsearch/compare/v0.3.5...HEAD
+[0.3.5]: https://github.com/dnaka91/docsearch/compare/v0.3.4...v0.3.5
 [0.3.4]: https://github.com/dnaka91/docsearch/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/dnaka91/docsearch/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/dnaka91/docsearch/compare/v0.3.1...v0.3.2
