@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased] - ReleaseDate
 
+- Unpin `serde` again and require at least `1.0.185`, which resolves the issue.
+
 ## [0.3.4] - 2023-08-19
 
 - Pin `serde` version to avoid using pre-compiled binaries during the build process.
