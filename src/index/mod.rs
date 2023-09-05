@@ -339,9 +339,9 @@ fn transform(raw: RawIndexData) -> IndexData {
                     .t
                     .into_iter()
                     .enumerate()
-                    .zip(raw_data.n.into_iter())
-                    .zip(raw_data.d.into_iter())
-                    .zip(raw_data.i.into_iter())
+                    .zip(raw_data.n)
+                    .zip(raw_data.d)
+                    .zip(raw_data.i)
                     .fold(
                         (Vec::with_capacity(length), String::new()),
                         |(mut items, path), ((((pos, t), n), d), i)| {
