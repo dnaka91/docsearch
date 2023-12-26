@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use winnow::{
     ascii::dec_uint,
     combinator::{
-        cut_err, delimited, fail, fold_repeat, peek, preceded, separated0, separated_pair, success,
+        cut_err, delimited, fail, fold_repeat, peek, preceded, separated, separated_pair, success,
         terminated,
     },
     dispatch,
@@ -172,7 +172,10 @@ fn unicode_escape(input: &mut Stream<'_>) -> PResult<char> {
 fn array(input: &mut Stream<'_>) -> PResult<Vec<JsJson>> {
     preceded(
         ('[', ws),
-        cut_err(terminated(separated0(json_value, (ws, ',', ws)), (ws, ']'))),
+        cut_err(terminated(
+            separated(0.., json_value, (ws, ',', ws)),
+            (ws, ']'),
+        )),
     )
     .context(StrContext::Label("array"))
     .parse_next(input)
@@ -181,7 +184,10 @@ fn array(input: &mut Stream<'_>) -> PResult<Vec<JsJson>> {
 fn object(input: &mut Stream<'_>) -> PResult<HashMap<String, JsJson>> {
     preceded(
         ('{', ws),
-        cut_err(terminated(separated0(key_value, (ws, ',', ws)), (ws, '}'))),
+        cut_err(terminated(
+            separated(0.., key_value, (ws, ',', ws)),
+            (ws, '}'),
+        )),
     )
     .context(StrContext::Label("object"))
     .parse_next(input)
